@@ -1,0 +1,28 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.8.1 (swiftlang-5.8.0.124.5 clang-1403.0.22.11.100)
+// swift-module-flags: -target x86_64-apple-ios14.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name BFSecurity
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+@_exported import BFSecurity
+import CryptoKit
+import Foundation
+import Security
+import Swift
+import _Concurrency
+import _StringProcessing
+public class BFSecurityService {
+  public init()
+  public func getPublicKeyToShared() -> Swift.String
+  public func deriveSharedSecretKey(for jsPublicKeyString: Swift.String) throws -> CryptoKit.SharedSecret
+  public func encryptaData(_ message: Swift.String, key: CryptoKit.SharedSecret) throws -> Swift.String
+  public func decryptData(_ content: Swift.String, key: CryptoKit.SharedSecret) throws -> Foundation.Data
+  @objc deinit
+}
+public enum SecurityServiceError : Swift.Error {
+  case error(_: any Swift.Error)
+  case other(message: Swift.String)
+}
+extension Swift.Error {
+  public var message: Swift.String {
+    get
+  }
+}

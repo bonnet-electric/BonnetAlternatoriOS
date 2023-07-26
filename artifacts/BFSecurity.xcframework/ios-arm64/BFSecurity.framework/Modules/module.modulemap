@@ -1,0 +1,11 @@
+framework module BFSecurity {
+  umbrella header "BFSecurity.h"
+
+  export *
+  module * { export * }
+}
+
+module BFSecurity.Swift {
+  header "BFSecurity-Swift.h"
+  requires objc
+}

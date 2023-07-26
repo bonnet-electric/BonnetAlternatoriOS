@@ -1,0 +1,558 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "BFSecurity",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "CryptoKit",
+        "printedName": "CryptoKit",
+        "declKind": "Import",
+        "moduleName": "BFSecurity"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "BFSecurityService",
+        "printedName": "BFSecurityService",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "BFSecurityService",
+                "printedName": "BFSecurity.BFSecurityService",
+                "usr": "s:10BFSecurity0A7ServiceC"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:10BFSecurity0A7ServiceCACycfc",
+            "mangledName": "$s10BFSecurity0A7ServiceCACycfc",
+            "moduleName": "BFSecurity",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "getPublicKeyToShared",
+            "printedName": "getPublicKeyToShared()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:10BFSecurity0A7ServiceC20getPublicKeyToSharedSSyF",
+            "mangledName": "$s10BFSecurity0A7ServiceC20getPublicKeyToSharedSSyF",
+            "moduleName": "BFSecurity",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "deriveSharedSecretKey",
+            "printedName": "deriveSharedSecretKey(for:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "SharedSecret",
+                "printedName": "CryptoKit.SharedSecret",
+                "usr": "s:9CryptoKit12SharedSecretV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:10BFSecurity0A7ServiceC21deriveSharedSecretKey3for9CryptoKit0dE0VSS_tKF",
+            "mangledName": "$s10BFSecurity0A7ServiceC21deriveSharedSecretKey3for9CryptoKit0dE0VSS_tKF",
+            "moduleName": "BFSecurity",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "encryptaData",
+            "printedName": "encryptaData(_:key:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "SharedSecret",
+                "printedName": "CryptoKit.SharedSecret",
+                "usr": "s:9CryptoKit12SharedSecretV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:10BFSecurity0A7ServiceC12encryptaData_3keyS2S_9CryptoKit12SharedSecretVtKF",
+            "mangledName": "$s10BFSecurity0A7ServiceC12encryptaData_3keyS2S_9CryptoKit12SharedSecretVtKF",
+            "moduleName": "BFSecurity",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "decryptData",
+            "printedName": "decryptData(_:key:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Data",
+                "printedName": "Foundation.Data",
+                "usr": "s:10Foundation4DataV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "SharedSecret",
+                "printedName": "CryptoKit.SharedSecret",
+                "usr": "s:9CryptoKit12SharedSecretV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:10BFSecurity0A7ServiceC11decryptData_3key10Foundation0D0VSS_9CryptoKit12SharedSecretVtKF",
+            "mangledName": "$s10BFSecurity0A7ServiceC11decryptData_3key10Foundation0D0VSS_9CryptoKit12SharedSecretVtKF",
+            "moduleName": "BFSecurity",
+            "declAttributes": [
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:10BFSecurity0A7ServiceC",
+        "mangledName": "$s10BFSecurity0A7ServiceC",
+        "moduleName": "BFSecurity",
+        "declAttributes": [
+          "AccessControl"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "BFSecurity",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "CryptoKit",
+        "printedName": "CryptoKit",
+        "declKind": "Import",
+        "moduleName": "BFSecurity"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "BFSecurity",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "SecurityServiceError",
+        "printedName": "SecurityServiceError",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "error",
+            "printedName": "error",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(BFSecurity.SecurityServiceError.Type) -> (Swift.Error) -> BFSecurity.SecurityServiceError",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Swift.Error) -> BFSecurity.SecurityServiceError",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "SecurityServiceError",
+                        "printedName": "BFSecurity.SecurityServiceError",
+                        "usr": "s:10BFSecurity20SecurityServiceErrorO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Error",
+                        "printedName": "Swift.Error",
+                        "usr": "s:s5ErrorP"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "BFSecurity.SecurityServiceError.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "SecurityServiceError",
+                        "printedName": "BFSecurity.SecurityServiceError",
+                        "usr": "s:10BFSecurity20SecurityServiceErrorO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:10BFSecurity20SecurityServiceErrorO5erroryACs0D0_pcACmF",
+            "mangledName": "$s10BFSecurity20SecurityServiceErrorO5erroryACs0D0_pcACmF",
+            "moduleName": "BFSecurity"
+          },
+          {
+            "kind": "Var",
+            "name": "other",
+            "printedName": "other",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(BFSecurity.SecurityServiceError.Type) -> (Swift.String) -> BFSecurity.SecurityServiceError",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Swift.String) -> BFSecurity.SecurityServiceError",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "SecurityServiceError",
+                        "printedName": "BFSecurity.SecurityServiceError",
+                        "usr": "s:10BFSecurity20SecurityServiceErrorO"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Tuple",
+                        "printedName": "(message: Swift.String)",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "BFSecurity.SecurityServiceError.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "SecurityServiceError",
+                        "printedName": "BFSecurity.SecurityServiceError",
+                        "usr": "s:10BFSecurity20SecurityServiceErrorO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:10BFSecurity20SecurityServiceErrorO5otheryACSS_tcACmF",
+            "mangledName": "$s10BFSecurity20SecurityServiceErrorO5otheryACSS_tcACmF",
+            "moduleName": "BFSecurity"
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:10BFSecurity20SecurityServiceErrorO",
+        "mangledName": "$s10BFSecurity20SecurityServiceErrorO",
+        "moduleName": "BFSecurity",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Error",
+            "printedName": "Error",
+            "usr": "s:s5ErrorP",
+            "mangledName": "$ss5ErrorP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "BFSecurity",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Security",
+        "printedName": "Security",
+        "declKind": "Import",
+        "moduleName": "BFSecurity"
+      },
+      {
+        "kind": "Import",
+        "name": "CryptoKit",
+        "printedName": "CryptoKit",
+        "declKind": "Import",
+        "moduleName": "BFSecurity"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "BFSecurity",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "BFSecurity",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "Error",
+        "printedName": "Error",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "message",
+            "printedName": "message",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:s5ErrorP10BFSecurityE7messageSSvp",
+            "mangledName": "$ss5ErrorP10BFSecurityE7messageSSvp",
+            "moduleName": "BFSecurity",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:s5ErrorP10BFSecurityE7messageSSvg",
+                "mangledName": "$ss5ErrorP10BFSecurityE7messageSSvg",
+                "moduleName": "BFSecurity",
+                "genericSig": "<τ_0_0 where τ_0_0 : Swift.Error>",
+                "sugared_genericSig": "<Self where Self : Swift.Error>",
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:s5ErrorP",
+        "mangledName": "$ss5ErrorP",
+        "moduleName": "Swift",
+        "genericSig": "<τ_0_0 : Swift.Sendable>",
+        "sugared_genericSig": "<Self : Swift.Sendable>",
+        "isExternal": true,
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          }
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Security\/EncriptationService.swift",
+      "kind": "StringLiteral",
+      "offset": 560,
+      "length": 39,
+      "value": "\"Message couldn't be transform to Data\""
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Security\/EncriptationService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 805,
+      "length": 2,
+      "value": "12"
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Security\/EncriptationService.swift",
+      "kind": "StringLiteral",
+      "offset": 1153,
+      "length": 28,
+      "value": "\"Couldn't encrypted message\""
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Security\/EncriptationService.swift",
+      "kind": "StringLiteral",
+      "offset": 1686,
+      "length": 39,
+      "value": "\"Message couldn't be transform to Data\""
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Security\/SecuredCommunication.swift",
+      "kind": "BooleanLiteral",
+      "offset": 424,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Security\/SecuredCommunication.swift",
+      "kind": "StringLiteral",
+      "offset": 1860,
+      "length": 39,
+      "value": "\"Could not transform js to base64 data\""
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Security\/SecuredCommunication.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1954,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Security\/SecuredCommunication.swift",
+      "kind": "StringLiteral",
+      "offset": 2305,
+      "length": 31,
+      "value": "\"Couln't create otherPublicKey\""
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Model\/Nonce.swift",
+      "kind": "Array",
+      "offset": 286,
+      "length": 1560,
+      "value": "[0b00110000, 0b00110001, 0b00110010, 0b00110011, 0b00110100, 0b00110101, 0b00110110, 0b00110111, 0b00111000, 0b00111001, 0b01000001, 0b01000010, 0b01000011, 0b01000100, 0b01000101, 0b01000110, 0b01000111, 0b01001000, 0b01001001, 0b01001010, 0b01001011, 0b01001100, 0b01001101, 0b01001110, 0b01001111, 0b01010000, 0b01010001, 0b01010010, 0b01010011, 0b01010100, 0b01010101, 0b01010110, 0b01010111, 0b01011000, 0b01011001, 0b01011010, 0b01100001, 0b01100010, 0b01100011, 0b01100100, 0b01100101, 0b01100110, 0b01100111, 0b01101000, 0b01101001, 0b01101010, 0b01101011, 0b01101100, 0b01101101, 0b01101110, 0b01101111, 0b01110000, 0b01110001, 0b01110010, 0b01110011, 0b01110100, 0b01110101, 0b01110110, 0b01110111, 0b01111000, 0b01111001, 0b01111010]"
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Model\/Nonce.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2038,
+      "length": 2,
+      "value": "32"
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Model\/Nonce.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2091,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Model\/Nonce.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2126,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Model\/Nonce.swift",
+      "kind": "StringLiteral",
+      "offset": 2910,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/anamarquez\/Code\/Bonnet\/Alternator\/bonnet-security\/BFSecurity\/Domain\/Model\/Nonce.swift",
+      "kind": "StringLiteral",
+      "offset": 3043,
+      "length": 6,
+      "value": "\"%02x\""
+    }
+  ]
+}
