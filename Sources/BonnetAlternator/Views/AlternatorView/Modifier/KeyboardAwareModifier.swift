@@ -31,7 +31,7 @@ internal struct KeyboardAwareModifier: ViewModifier {
             .padding(.bottom, shouldUpdate ? keyboardHeight : 0)
             .onReceive(keyboardHeightPublisher) {
                 debugPrint("Keyboard height: \($0), should update: \(shouldUpdate)")
-                self.keyboardHeight = $0
+                self.keyboardHeight = shouldUpdate ? $0 : 0
             }
     }
 }

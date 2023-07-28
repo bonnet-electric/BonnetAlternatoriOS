@@ -101,7 +101,9 @@ struct AlternatorView: View {
             self.model.isLoading = true
         })
         .presentToast($model.toast)
-        .presentBottomSheet(presented: self.$closeBottomSheetPresented, bgType: .blurDismissableBG) {
+        .presentBottomSheet(presented: self.$closeBottomSheetPresented,
+                            bgType: .blurDismissableBG
+        ) {
             VStack(spacing: 24) {
                 Text("Are you sure you want to exit charging?")
                     .font(.body)
