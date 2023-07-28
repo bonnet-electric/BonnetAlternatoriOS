@@ -12,25 +12,24 @@ import SwiftUI
 import Combine
 
 class AlternatorViewModel: NSObject, ObservableObject {
-    
     // MARK: - Published
-    
     @Published var toast: Toast? = nil
     @Published var sendMessageDisable: Bool = true
     @Published var isLoading: Bool = true
     @Published var allowKeyboardChanges: Bool = true
     
     // MARK: - Parameters
-    
     let webView: WKWebView
     let environment: AlternatorEnvironment
-    
     private var cancellables: Set<AnyCancellable> = []
     private let urlString = "https://test.alternator.bonnetapps.com"
+    
+    // MARK: - Services
     private let webService: WebService
     private let userLocationService: UserLocationService
     private let userDefaultHelper = UsersDefaultHelper.shared
     
+    // MARK: - Initialisation
     init(tokenDelegate: TokenGeneratorDelegate?) {
         let configuration = WKWebViewConfiguration()
         configuration.defaultWebpagePreferences.allowsContentJavaScript = true
@@ -40,16 +39,19 @@ class AlternatorViewModel: NSObject, ObservableObject {
         self.webService = .init(webView: newWebView)
         self.userLocationService = UserLocationService()
         
-        if let envString = UsersDefaultHelper.shared.getString(forKey: .environment),
-           let environment = AlternatorEnvironment(rawValue: envString)
-        {
-            self.environment = environment
-        } else {
-            self.environment = .production
-        }
+        // TODO: - Environment logic hide until need it.
+//        if let envString = UsersDefaultHelper.shared.getString(forKey: .environment),
+//           let environment = AlternatorEnvironment(rawValue: envString)
+//        {
+//            self.environment = environment
+//        } else {
+//            self.environment = .production
+//        }
+        
+        // TODO: - By default Production
+        self.environment = .production
         
         super.init()
-        
         self.webService.tokenDelegate = tokenDelegate
         self.addListeners()
     }
@@ -87,7 +89,6 @@ extension AlternatorViewModel {
     }
     
     // MARK: - Public func
-    
     func loadUrl() {
         var updatedPath = self.urlString
         // Check if we have a saved path
@@ -127,6 +128,9 @@ extension AlternatorViewModel {
         }
     }
     
+    // MARK: - Messaging toast
+    // Not in use at the moment
+    
     @MainActor
     private func updateToast(with toast: Toast) {
         guard self.environment == .staging else { return }
@@ -143,7 +147,6 @@ extension AlternatorViewModel {
             debugPrint("[Bonnet Alternator] Coordinates updated")
         } catch let error {
             debugPrint("[Bonnet Alternator] Couldn't update coordinates, with error: \(error.message)")
-//            self.updateToast(with: .init(style: .warning, message: "Couldn't update coordinates"))
         }
     }
 }
@@ -168,7 +171,6 @@ extension AlternatorViewModel: MessageHandler {
                 self.allowKeyboardChanges = !isOpen
             }
         }
-        
         debugPrint("[Bonnet Alternator] Did receive message: \(message)")
     }
     

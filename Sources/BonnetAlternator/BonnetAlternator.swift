@@ -6,25 +6,25 @@ public struct BonnetAlternator {
     public init() { }
     
     // MARK: - Environment
+    // TODO: - Environment logic hide until need it.
     
     /// Assign new active environment
-    public static func setEnvironment(to newEnvironment: AlternatorEnvironment) {
-        UsersDefaultHelper.shared.save(newEnvironment.rawValue, withKey: .environment)
-        debugPrint("[Bonnet Alternator] Environment mode set to: \(newEnvironment.rawValue)")
-    }
+//    public static func setEnvironment(to newEnvironment: AlternatorEnvironment) {
+//        UsersDefaultHelper.shared.save(newEnvironment.rawValue, withKey: .environment)
+//        debugPrint("[Bonnet Alternator] Environment mode set to: \(newEnvironment.rawValue)")
+//    }
     
     /// Get active environment
-    public var currentEnvironment: AlternatorEnvironment {
-        guard let envString = UsersDefaultHelper.shared.getString(forKey: .environment),
-              let environment = AlternatorEnvironment(rawValue: envString)
-        else { return .production }
-        return environment
-    }
+//    public var currentEnvironment: AlternatorEnvironment {
+//        guard let envString = UsersDefaultHelper.shared.getString(forKey: .environment),
+//              let environment = AlternatorEnvironment(rawValue: envString)
+//        else { return .production }
+//        return environment
+//    }
     
     // MARK: - UIKit Presentation
     
     #if canImport(UIKit)
-    
     /// Present Bonnet charging screen
     /// - Parameters:
     ///   - controller: Parent from where the view will be presented
@@ -45,7 +45,14 @@ public struct BonnetAlternator {
     #endif
 }
 
-// MARK: - Environment
-public enum AlternatorEnvironment: String, Equatable {
-    case staging, production
+#if os(iOS)
+extension View {
+    public func showChargingUI(_ presented: Binding<Bool>,
+                               logoImage: LogoIcon? = nil,
+                               delegate: TokenGeneratorDelegate?) -> some View {
+        
+        let viewModel = AlternatorViewModel(tokenDelegate: delegate)
+        return self.modifier(AlternatorViewModifier(isPresented: presented, viewModel: viewModel, logoImage: logoImage))
+    }
 }
+#endif

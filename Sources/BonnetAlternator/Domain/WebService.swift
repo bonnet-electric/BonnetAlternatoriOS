@@ -95,9 +95,9 @@ extension WebService: MessagingFormatterDelegate {
 extension WebService: WKScriptMessageHandler {
     
     internal func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        
         if message.name == "logHandler" {
             debugPrint("[Bonnet Alternator] [Web] LOG: \(message.body as? String)")
-            self.messageHandler?.error("LOG: \(message.body as? String)")
             return
         }
         
@@ -165,7 +165,6 @@ extension WebService: WKScriptMessageHandler {
                     self.messageHandler?.didReceive(result)
                     
                 case .failure(let decryptedError):
-                    debugPrint("[Bonent Alternator] received message decrypted error: \(decryptedError.message)")
                     self.messageHandler?.error("Decrypted error: \(decryptedError.message)")
                 }
             }

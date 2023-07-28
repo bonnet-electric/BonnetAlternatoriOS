@@ -9,6 +9,6 @@ import Foundation
 
 protocol MessageHandler: Any {
     func didReceive(_ response: CommomResponseModel)
-    @MainActor func updateLoader(_ loading: Bool)
     func error(_ message: String)
+    @MainActor func updateLoader(_ loading: Bool)
 }

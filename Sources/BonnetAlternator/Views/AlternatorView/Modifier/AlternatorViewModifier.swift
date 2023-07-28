@@ -23,14 +23,4 @@ struct AlternatorViewModifier: ViewModifier {
         }
     }
 }
-
-extension View {
-    public func showChargingUI(_ presented: Binding<Bool>,
-                               logoImage: LogoIcon? = nil,
-                               delegate: TokenGeneratorDelegate?) -> some View {
-        
-        let viewModel = AlternatorViewModel(tokenDelegate: delegate)
-        return self.modifier(AlternatorViewModifier(isPresented: presented, viewModel: viewModel, logoImage: logoImage))
-    }
-}
 #endif
