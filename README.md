@@ -6,8 +6,7 @@ Bonnet’s Alternator SDK can be added to iOS apps as a package that provides th
 
 ## Intallation
 
-#### Minimum OS version required 
-**iOS 14**
+Minimum OS version required -> **iOS 14**
 
 ### Swift Package
 
