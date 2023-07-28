@@ -22,6 +22,13 @@ struct CommomResponseModel: Codable {
         case browser = "BROWSER"
         case loading = "LOADING"
         case filters = "FILTER"
+        // Clearly mention if intecom its beeing open (TRUE) and when its close (FALSE)
+        case intercom = "INTERCOM"
+        case unowned
+        
+        init(from decoder: Decoder) throws {
+            self = try .initializedOptionalWith(decoder: decoder, defaultValue: .unowned)
+        }
     }
 
     enum Platform: String, Codable {
@@ -39,5 +46,13 @@ struct CommomResponseModel: Codable {
         var latitude: Double? = nil
         var longitude: Double? = nil
         var setting: Bool? = nil
+    }
+}
+
+extension Decodable where Self: RawRepresentable, RawValue: Decodable {
+    static func initializedOptionalWith(decoder: Decoder, defaultValue: Self) throws -> Self {
+        let container = try decoder.singleValueContainer()
+        let value = try container.decode(RawValue.self)
+        return .init(rawValue: value) ?? defaultValue
     }
 }

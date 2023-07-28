@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'BonnetAlternator'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.summary          = 'Elegant way to connect your users with a large platform of chargers'
   s.homepage         = 'https://www.joinbonnet.com/home-header-b'

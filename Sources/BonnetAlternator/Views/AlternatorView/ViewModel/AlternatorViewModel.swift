@@ -18,6 +18,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
     @Published var toast: Toast? = nil
     @Published var sendMessageDisable: Bool = true
     @Published var isLoading: Bool = true
+    @Published var allowKeyboardChanges: Bool = true
     
     // MARK: - Parameters
     
@@ -157,6 +158,15 @@ extension AlternatorViewModel: MessageHandler {
                 UIApplication.shared.open(url)
             }
             return
+        }
+        
+        if response.type == .intercom,
+           let isOpen = response.data?.setting
+        {
+            // Intercom have their own listener to update the view, so the keyboard changes should not happen when the keyboard its open from Intercom
+            DispatchQueue.main.async {
+                self.allowKeyboardChanges = !isOpen
+            }
         }
         
         debugPrint("[Bonnet Alternator] Did receive message: \(message)")

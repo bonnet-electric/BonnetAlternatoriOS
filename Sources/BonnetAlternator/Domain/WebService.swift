@@ -61,7 +61,6 @@ final class WebService: NSObject {
         {
             escapedMessage = encryptedMessage
         }
-        
         self.formattedAndSentJsMessage(with: escapedMessage)
     }
     
@@ -134,6 +133,12 @@ extension WebService: WKScriptMessageHandler {
                 
                 switch decryptedResult {
                 case .success(let result):
+                    
+                    if result.type == .unowned {
+                        debugPrint("[Bonent Alternator] received message with unowned type: \(body)")
+                        return
+                    }
+                    
                     if result.type == .token {
                         await self.refreshToken()
                         return
