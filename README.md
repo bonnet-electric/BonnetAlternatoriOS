@@ -6,27 +6,56 @@ Bonnet’s Alternator SDK can be added to iOS apps as a package that provides th
 
 ## Intallation
 
-Will depend if the SDK would be public or private.
+### Swift Package
+
+The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler.
+
+Once you have your Swift package set up, adding Bonnet Alternator as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`
+
+```swift
+dependencies: [
+    .package(url: "git@github.com:bonnet-electric/BonnetAlternatoriOS.git", branch: "main")
+],
+```
+
+Or add the dependency from Xcode Project/Package Dependencies, using the URL below, pointing to `main` branch.
+
+```swift
+    git@github.com:bonnet-electric/BonnetAlternatoriOS.git
+```
+
+### Cocoa Pods
+
+[CocoaPods](https://cocoapods.org/) is a dependency manager for Cocoa projects. For usage and installation instructions, visit their website. To integrate Bonnet Alternator into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```swift
+# While the library is still private we need to include the branch
+pod 'BonnetAlternator', :git => 'git@github.com:bonnet-electric/BonnetAlternatoriOS.git', :branch => 'main'
+```
 
 ## Usage
 
 Start by importing the SDK in the file you want to present it from by simply calling:
+
 ```swift
 import BonnetAlternator
 ```
+
 This will then allow you to present the ChargingUI using the framework of your choice, UIKit or SwiftUI, as is demonstrated below. In both cases, the ChargingUI takes in a `logoImage` and `tokenDelegate` as arguments, which are your company’s logo which appears on the top left of the ChargingUI, and the Delegate which retrieves your user’s auth token from your server, respectively.
 
-The `logoImage` is type `LogoIcon`, as shown below the initialisation receive the name of the image and the size, where the size defines the with of the image being `narrow` (default) or `wide`.
+**LogoIcon**
+The `logoImage` is type `LogoIcon`, as shown below the initialisation receive the name of the image and the size, where the size defines the width of the image being `narrow` (default) or `wide`.
+
 ```swift
 // Initialisation example
 LogoIcon(name: <#T##String#>, size: <#T##Size#>)
 
 // Options for Size enum
 enum Size {
-    /// Icon sized 25x25
-  case narrow
-  /// Icon sized 25x80
-  case wide
+    /// Icon sized 34x24
+    case narrow
+    /// Icon sized 110x24
+    case wide
 }
 ```
 
@@ -61,8 +90,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func alternatorButtonTapped(_ sender: Any) {
-        // Update the environment, the options are staging and production (Default)
-        BonnetAlternator.main.setMode(to: .staging)
         // Present the alternator view
         BonnetAlternator.main.presentChargingUI(from: self, tokenDelegate: self)
     }
@@ -71,6 +98,7 @@ class ViewController: UIViewController {
 
 ### SwiftUI
 When using SwiftUI, the presentation is done through a modifier, which means that the ChargingUI can simply be added to your view and the presentation state can be controlled with a `@State<Bool> / @Binding<Bool>` variable.
+
 ```swift
 .showChargingUI(<#T##presented: Binding<Bool>##Binding<Bool>#>, logoImageName: <#T##String?#>, tokenDelegate: <#T##TokenGeneratorDelegate?#>)
 ```
@@ -97,6 +125,7 @@ struct ContentView: View {
 ```
 
 ### Token Generation/Refresh
+
 To use this SDK, your users will need an authentication token that will need to be generated in your server, and passed onto the SDK so it can securely be passed on to Bonnet’s server see [Authentication/authorisation](https://www.notion.so/Authentication-authorisation-6a391f45fffc46e9a09dff6f8e683b85?pvs=21). For this, you will need a `TokenGeneratorDelegate`.
 This delegate needs to be assigned during the presentation of the ChargingUI (See initialisation code examples above).
 Add the delegate as an extension of your view and include the functions required to retrieve the token from your server.

@@ -166,7 +166,6 @@ extension AlternatorViewModel: MessageHandler {
         if response.type == .intercom,
            let isIntercomOpen = response.data?.setting
         {
-            debugPrint("[Bonnet Alternator] Intercom message, data: \(isIntercomOpen)")
             // Intercom have their own listener to update the view, so the keyboard changes should not happen when the keyboard its open from Intercom
             DispatchQueue.main.async {
                 self.allowKeyboardChanges = !isIntercomOpen
