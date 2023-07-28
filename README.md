@@ -6,6 +6,9 @@ Bonnet’s Alternator SDK can be added to iOS apps as a package that provides th
 
 ## Intallation
 
+#### Minimum OS version required 
+**iOS 14**
+
 ### Swift Package
 
 The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler.
