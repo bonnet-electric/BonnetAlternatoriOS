@@ -94,12 +94,12 @@ struct AlternatorView: View {
                     self.model.loadUrl()
                 }
         }
+        .updatePaddingWithKeyboardChanges(self.$model.allowKeyboardChanges)
         .edgesIgnoringSafeArea(.bottom)
         .background(Color.white.edgesIgnoringSafeArea(.all))
         .onAppear(perform: {
             self.model.isLoading = true
         })
-        .updatePaddingWithKeyboardChanges(self.$model.allowKeyboardChanges)
         .presentToast($model.toast)
         .presentBottomSheet(presented: self.$closeBottomSheetPresented, bgType: .blurDismissableBG) {
             VStack(spacing: 24) {
