@@ -159,7 +159,6 @@ extension WebService: WKScriptMessageHandler {
                     if result.type == .path {
                         guard let path = result.data?.value else { return }
                         self.userDefaultsHelper.set(SavedPath(path: path), forKey: .userAlternatorPath)
-                        return
                     }
                     
                     self.messageHandler?.didReceive(result)

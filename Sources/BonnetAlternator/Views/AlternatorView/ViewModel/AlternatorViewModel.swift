@@ -24,6 +24,9 @@ class AlternatorViewModel: NSObject, ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     private let urlString = "https://test.alternator.bonnetapps.com"
     
+    // MARK: Keyboard helper
+    internal var isIntercomOpen: Bool = false
+    
     // MARK: - Services
     private let webService: WebService
     private let userLocationService: UserLocationService
@@ -167,10 +170,23 @@ extension AlternatorViewModel: MessageHandler {
            let isIntercomOpen = response.data?.setting
         {
             // Intercom have their own listener to update the view, so the keyboard changes should not happen when the keyboard its open from Intercom
+            self.isIntercomOpen = isIntercomOpen
             DispatchQueue.main.async {
                 self.allowKeyboardChanges = !isIntercomOpen
             }
+            return
         }
+        
+        if response.type == .path,
+           let path = self.savedPath?.path
+        {
+            // Dont use keyboard changes if we are on location details (search)
+            let isLocationDetails = path.contains("/locations/")
+            DispatchQueue.main.async {
+                self.allowKeyboardChanges = !isLocationDetails
+            }
+        }
+        
         debugPrint("[Bonnet Alternator] Did receive message: \(message)")
     }
     
