@@ -6,21 +6,20 @@ public struct BonnetAlternator {
     public init() { }
     
     // MARK: - Environment
-    // TODO: - Environment logic hide until need it.
     
-    /// Assign new active environment
-//    public static func setEnvironment(to newEnvironment: AlternatorEnvironment) {
-//        UsersDefaultHelper.shared.save(newEnvironment.rawValue, withKey: .environment)
-//        debugPrint("[Bonnet Alternator] Environment mode set to: \(newEnvironment.rawValue)")
-//    }
+    /// Assign environment
+    public static func setEnvironment(to newEnvironment: AlternatorEnvironment) {
+        UsersDefaultHelper.shared.save(newEnvironment.rawValue, withKey: .environment)
+        debugPrint("[Bonnet Alternator] Environment mode set to: \(newEnvironment.rawValue)")
+    }
     
     /// Get active environment
-//    public var currentEnvironment: AlternatorEnvironment {
-//        guard let envString = UsersDefaultHelper.shared.getString(forKey: .environment),
-//              let environment = AlternatorEnvironment(rawValue: envString)
-//        else { return .production }
-//        return environment
-//    }
+    public var activeEnvironment: AlternatorEnvironment {
+        guard let envString = UsersDefaultHelper.shared.getString(forKey: .environment),
+              let environment = AlternatorEnvironment(rawValue: envString)
+        else { return .production }
+        return environment
+    }
     
     // MARK: - UIKit Presentation
     

@@ -7,8 +7,15 @@
 
 import Foundation
 
-// MARK: - Environment: It's not public until need it.
-//public
-internal enum AlternatorEnvironment: String, Equatable {
+public enum AlternatorEnvironment: String, Equatable {
     case staging, production
+    
+    internal var url: String {
+        switch self {
+        case .staging:
+            return "https://test5.alternator.bonnetapps.com/"
+        case .production:
+            return "https://alternator.bonnetapps.com/"
+        }
+    }
 }

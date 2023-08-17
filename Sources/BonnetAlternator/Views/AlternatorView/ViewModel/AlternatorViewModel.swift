@@ -22,7 +22,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
     let webView: WKWebView
     let environment: AlternatorEnvironment
     private var cancellables: Set<AnyCancellable> = []
-    private let urlString = "https://test.alternator.bonnetapps.com"
+    private let urlString: String
     
     // MARK: Keyboard helper
     internal var isIntercomOpen: Bool = false
@@ -42,17 +42,15 @@ class AlternatorViewModel: NSObject, ObservableObject {
         self.webService = .init(webView: newWebView)
         self.userLocationService = UserLocationService()
         
-        // TODO: - Environment logic hide until need it.
-//        if let envString = UsersDefaultHelper.shared.getString(forKey: .environment),
-//           let environment = AlternatorEnvironment(rawValue: envString)
-//        {
-//            self.environment = environment
-//        } else {
-//            self.environment = .production
-//        }
+        if let envString = UsersDefaultHelper.shared.getString(forKey: .environment),
+           let environment = AlternatorEnvironment(rawValue: envString)
+        {
+            self.environment = environment
+        } else {
+            self.environment = .production
+        }
         
-        // TODO: - By default Production
-        self.environment = .production
+        self.urlString = self.environment.url
         
         super.init()
         self.webService.tokenDelegate = tokenDelegate
@@ -192,7 +190,6 @@ extension AlternatorViewModel: MessageHandler {
     
     @MainActor
     func updateLoader(_ loading: Bool) {
-        debugPrint("[Bonnet Alternator] Loader updated to: \(loading)")
         self.isLoading = loading
     }
     
