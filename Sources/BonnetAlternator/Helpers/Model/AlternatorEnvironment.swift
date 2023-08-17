@@ -8,7 +8,7 @@
 import Foundation
 
 public enum AlternatorEnvironment: String, Equatable {
-    case staging, production
+    case staging, production, internalTesting
     
     internal var url: String {
         switch self {
@@ -16,6 +16,8 @@ public enum AlternatorEnvironment: String, Equatable {
             return "https://test5.alternator.bonnetapps.com/"
         case .production:
             return "https://alternator.bonnetapps.com/"
+        case .internalTesting:
+            return "https://test.alternator.bonnetapps.com"
         }
     }
 }
