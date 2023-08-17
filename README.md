@@ -93,7 +93,7 @@ class ViewController: UIViewController {
     
     @IBAction func alternatorButtonTapped(_ sender: Any) {
         // Present the alternator view
-        BonnetAlternator.main.presentChargingUI(from: self, tokenDelegate: self)
+        BonnetAlternator().presentChargingUI(from: self, tokenDelegate: self)
     }
 }
 ```
