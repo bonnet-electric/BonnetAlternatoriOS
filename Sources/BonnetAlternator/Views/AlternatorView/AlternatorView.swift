@@ -44,7 +44,7 @@ struct AlternatorView: View {
                         .frame(width: 28, height: 28)
                 }
                 
-                if self.model.environment == .staging {
+                if self.model.environment == .internalTesting {
                     Menu {
                         Button("Open Browser") {
                             self.model.openBrowser()
