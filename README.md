@@ -16,14 +16,14 @@ Once you have your Swift package set up, adding Bonnet Alternator as a dependenc
 
 ```swift
 dependencies: [
-    .package(url: "git@github.com:bonnet-electric/BonnetAlternatoriOS.git", branch: "main")
+    .package(url: "https://github.com/bonnet-electric/BonnetAlternatoriOS.git", branch: "main")
 ],
 ```
 
 Or add the dependency from Xcode Project/Package Dependencies, using the URL below, pointing to `main` branch.
 
 ```swift
-    git@github.com:bonnet-electric/BonnetAlternatoriOS.git
+    https://github.com/bonnet-electric/BonnetAlternatoriOS.git
 ```
 
 ### Cocoa Pods
