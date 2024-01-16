@@ -28,6 +28,6 @@ public struct LogoIcon {
             return 110.0
         }
         
-        var height: CGFloat { 24.0 }
+        var height: CGFloat { 34.0 }
     }
 }

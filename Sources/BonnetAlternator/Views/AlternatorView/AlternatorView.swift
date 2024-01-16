@@ -34,7 +34,7 @@ struct AlternatorView: View {
                     Image(logoImage.name)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: logoImage.size.width, height: logoImage.size.height)
+                        .frame(width: logoImage.size.width, height: logoImage.size.height, alignment: .leading)
                 }
                 
                 Spacer()
@@ -49,7 +49,7 @@ struct AlternatorView: View {
                         Button("Open Browser") {
                             self.model.openBrowser()
                         }
-                        Button("Get JWToken") {
+                        Button("Test JWToken") {
                             self.model.requestJSToken()
                         }
                     } label: {
@@ -83,8 +83,7 @@ struct AlternatorView: View {
                     .frame(width: 28, height: 28)
                 }
             }
-            .padding(.leading, 24)
-            .padding(.trailing, 16)
+            .padding(.horizontal, 16)
             .padding(.vertical, 8)
             .frame(height: 44)
             .background(Color.white)
