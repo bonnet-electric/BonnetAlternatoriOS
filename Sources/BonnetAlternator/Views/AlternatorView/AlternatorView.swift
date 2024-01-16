@@ -107,6 +107,7 @@ struct AlternatorView: View {
                 Text("Are you sure you want to exit charging?")
                     .font(.body)
                     .fontWeight(.semibold)
+                    .multilineTextAlignment(.center)
                 
                 HStack(spacing: 16) {
                     Button {
@@ -150,7 +151,7 @@ struct AlternatorView: View {
                     .foregroundColor(.black)
                 }
             }
-            .padding(.horizontal, 32)
+            .padding(.horizontal, 16)
         }
     }
 }
