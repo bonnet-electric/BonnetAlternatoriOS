@@ -21,8 +21,8 @@ struct BottomSheetView<Content: View>: View {
         ZStack(alignment: .bottom) {
             if isPresented {
                 content
-                    .padding(.vertical, 32)
-                    .padding(.bottom, 16)
+                    .padding(.top, 32)
+                    .padding(.bottom, 40)
                     .background(Color(hex: "F4F1F2"))
                     .cornerRadius(16)
                     .transition(.move(edge: .bottom))
