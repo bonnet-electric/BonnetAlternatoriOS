@@ -92,6 +92,7 @@ extension AlternatorViewModel {
     // MARK: - Public func
     
     func loadUrl() {
+        debugPrint("[Bonnet Alternator] URL: \(self.urlString)")
         var updatedPath = self.urlString
         // Check if we have a saved path
         if let savedPath {
