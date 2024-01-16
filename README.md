@@ -23,7 +23,7 @@ dependencies: [
 Or add the dependency from Xcode Project/Package Dependencies, using the URL below, pointing to `main` branch.
 
 ```swift
-    https://github.com/bonnet-electric/BonnetAlternatoriOS.git
+https://github.com/bonnet-electric/BonnetAlternatoriOS.git
 ```
 
 ### Cocoa Pods
@@ -31,8 +31,7 @@ Or add the dependency from Xcode Project/Package Dependencies, using the URL bel
 [CocoaPods](https://cocoapods.org/) is a dependency manager for Cocoa projects. For usage and installation instructions, visit their website. To integrate Bonnet Alternator into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```swift
-# While the library is still private we need to include the branch
-pod 'BonnetAlternator', :git => 'git@github.com:bonnet-electric/BonnetAlternatoriOS.git', :branch => 'main'
+pod 'BonnetAlternator', :git => 'https://github.com/bonnet-electric/BonnetAlternatoriOS.git', :branch => 'main'
 ```
 
 ## Usage
