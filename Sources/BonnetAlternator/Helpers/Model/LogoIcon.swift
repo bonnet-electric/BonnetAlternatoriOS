@@ -18,9 +18,9 @@ public struct LogoIcon {
     }
     
     public enum Size {
-        /// Icon sized 34x24
+        /// Icon sized 34x34
         case narrow
-        /// Icon sized 110x24
+        /// Icon sized 110x34
         case wide
         
         var width: CGFloat {

@@ -44,9 +44,9 @@ struct AlternatorView: View {
                         .frame(width: 28, height: 28)
                 }
                 
-                if self.model.environment == .internalTesting {
+                if self.model.environment == .staging {
                     Menu {
-                        Button("Open Browser") {
+                        Button("Test open Browser") {
                             self.model.openBrowser()
                         }
                         Button("Test JWToken") {
