@@ -22,6 +22,7 @@ struct BottomSheetView<Content: View>: View {
             if isPresented {
                 content
                     .padding(.vertical, 32)
+                    .padding(.bottom, 16)
                     .background(Color(hex: "F4F1F2"))
                     .cornerRadius(16)
                     .transition(.move(edge: .bottom))
