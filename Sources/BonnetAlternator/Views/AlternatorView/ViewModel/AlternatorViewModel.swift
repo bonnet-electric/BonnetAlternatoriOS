@@ -99,8 +99,6 @@ extension AlternatorViewModel {
     // MARK: - Public func
     
     func loadUrl() {
-        debugPrint("[Bonnet Alternator] URL: \(self.urlString)")
-        
         var updatedPath = self.urlString
         // Check if we have a saved path
         if let savedPath {
@@ -112,6 +110,8 @@ extension AlternatorViewModel {
             self.userDefaultHelper.removeObject(forKey: .userAlternatorPath)
         }
         
+        debugPrint("[Bonnet Alternator] URL: \(updatedPath)")
+            
         guard let url = URL(string: updatedPath) else { return }
         self.webView.load(URLRequest(url: url))
         self.webService.addListeners(self)
