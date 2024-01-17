@@ -89,6 +89,8 @@ extension WebService: MessagingFormatterDelegate {
         "if (typeof window.postMessage === 'function') { " +
         "window.postMessage('\(content)'); " +  "} " + "})()"
         self.webView.evaluateJavaScript(jsCode)
+        
+        debugPrint("[Bonnet Alternator] [Web] JS code sent")
     }
 }
 
@@ -137,6 +139,10 @@ extension WebService: WKScriptMessageHandler {
                     if result.type == .unowned {
                         debugPrint("[Bonent Alternator] received message with unowned type: \(body)")
                         return
+                    }
+                    
+                    if let type = result.type?.rawValue {
+                        debugPrint("[Bonent Alternator] received message of type: \(type)")
                     }
                     
                     if result.type == .token {

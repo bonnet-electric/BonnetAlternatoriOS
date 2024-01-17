@@ -34,7 +34,7 @@ struct AlternatorView: View {
                     Image(logoImage.name)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: logoImage.size.width, height: logoImage.size.height)
+                        .frame(width: logoImage.size.width, height: logoImage.size.height, alignment: .leading)
                 }
                 
                 Spacer()
@@ -46,17 +46,17 @@ struct AlternatorView: View {
                 
                 if self.model.environment == .staging {
                     Menu {
-                        Button("Open Browser") {
+                        Button("Test open Browser") {
                             self.model.openBrowser()
                         }
-                        Button("Get JWToken") {
+                        Button("Test JWToken") {
                             self.model.requestJSToken()
                         }
                     } label: {
                         ZStack {
                             Circle()
                                 .fill(Color.sdkGrey)
-                            Image(systemName: "line.3.horizontal")
+                            Image(systemName: "plus")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 15, height: 15)
@@ -83,8 +83,7 @@ struct AlternatorView: View {
                     .frame(width: 28, height: 28)
                 }
             }
-            .padding(.leading, 24)
-            .padding(.trailing, 16)
+            .padding(.horizontal, 16)
             .padding(.vertical, 8)
             .frame(height: 44)
             .background(Color.white)
@@ -92,6 +91,9 @@ struct AlternatorView: View {
             WebViewUI(webView: model.webView)
                 .onAppear {
                     self.model.loadUrl()
+                }
+                .onDisappear {
+                    debugPrint("[Bonnet Alternator] web view deallocated")
                 }
         }
         .updatePaddingWithKeyboardChanges(self.$model.allowKeyboardChanges)
@@ -108,6 +110,7 @@ struct AlternatorView: View {
                 Text("Are you sure you want to exit charging?")
                     .font(.body)
                     .fontWeight(.semibold)
+                    .multilineTextAlignment(.center)
                 
                 HStack(spacing: 16) {
                     Button {
@@ -151,7 +154,7 @@ struct AlternatorView: View {
                     .foregroundColor(.black)
                 }
             }
-            .padding(.horizontal, 32)
+            .padding(.horizontal, 16)
         }
     }
 }

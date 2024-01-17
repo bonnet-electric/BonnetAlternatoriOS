@@ -34,14 +34,17 @@ class AlternatorViewModel: NSObject, ObservableObject {
     
     // MARK: - Initialisation
     init(tokenDelegate: TokenGeneratorDelegate?) {
+        // Initialise webview with configuration
         let configuration = WKWebViewConfiguration()
         configuration.defaultWebpagePreferences.allowsContentJavaScript = true
         let newWebView = WKWebView(frame: .zero, configuration: configuration)
-        
         self.webView = newWebView
+        // Initialise web service with new webview
         self.webService = .init(webView: newWebView)
+        
         self.userLocationService = UserLocationService()
         
+        // Configure environment with set values
         if let envString = UsersDefaultHelper.shared.getString(forKey: .environment),
            let environment = AlternatorEnvironment(rawValue: envString)
         {
@@ -49,10 +52,12 @@ class AlternatorViewModel: NSObject, ObservableObject {
         } else {
             self.environment = .production
         }
-        
+        // Configure url based on the environment
         self.urlString = self.environment.url
+        debugPrint("[Bonnet Alternator] Environment: \(self.environment.rawValue)")
         
         super.init()
+        self.webView.navigationDelegate = self
         self.webService.tokenDelegate = tokenDelegate
         self.addListeners()
     }
@@ -62,6 +67,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
     }
     
     private func addListeners() {
+        // Listen to the successful connection confirmation
         self.webService.connectionCompleted = { [weak self] in
             guard let self else { return }
             Task {
@@ -72,6 +78,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
             }
         }
         
+        // Listen to user's current location
         self.userLocationService.$currentCoordinate.receive(on: DispatchQueue.main).sink { [weak self] newValue in
             guard let self,
                   let coordinate = newValue,
@@ -90,8 +97,8 @@ extension AlternatorViewModel {
     }
     
     // MARK: - Public func
+    
     func loadUrl() {
-        debugPrint("[Bonnet Alternator] URL: \(self.urlString)")
         var updatedPath = self.urlString
         // Check if we have a saved path
         if let savedPath {
@@ -103,6 +110,8 @@ extension AlternatorViewModel {
             self.userDefaultHelper.removeObject(forKey: .userAlternatorPath)
         }
         
+        debugPrint("[Bonnet Alternator] URL: \(updatedPath)")
+            
         guard let url = URL(string: updatedPath) else { return }
         self.webView.load(URLRequest(url: url))
         self.webService.addListeners(self)
@@ -131,7 +140,7 @@ extension AlternatorViewModel {
     }
     
     // MARK: - Messaging toast
-    // Not in use at the moment
+    // Only used for testing
     
     @MainActor
     private func updateToast(with toast: Toast) {
@@ -153,12 +162,17 @@ extension AlternatorViewModel {
     }
 }
 
+// MARK: - Message Handler
+
 extension AlternatorViewModel: MessageHandler {
     func didReceive(_ response: CommomResponseModel) {
         guard let message = response.data?.value else { return }
         
         if response.type == .browser {
             guard let url = URL(string: message), UIApplication.shared.canOpenURL(url) else { return }
+            
+            debugPrint("[Bonnet Alternator] Did receive url: \(message)")
+            
             DispatchQueue.main.async {
                 UIApplication.shared.open(url)
             }
@@ -198,4 +212,7 @@ extension AlternatorViewModel: MessageHandler {
         debugPrint("[Bonnet Alternator] Did receive error: \(message)")
     }
 }
+
+// MARK: - WKNavigationDelegate
+extension AlternatorViewModel: WKNavigationDelegate { }
 #endif
