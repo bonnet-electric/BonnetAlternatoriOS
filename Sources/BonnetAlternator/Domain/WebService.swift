@@ -139,6 +139,10 @@ extension WebService: WKScriptMessageHandler {
                         return
                     }
                     
+                    if let type = result.type?.rawValue {
+                        debugPrint("[Bonent Alternator] received message of type: \(type)")
+                    }
+                    
                     if result.type == .token {
                         await self.refreshToken()
                         return

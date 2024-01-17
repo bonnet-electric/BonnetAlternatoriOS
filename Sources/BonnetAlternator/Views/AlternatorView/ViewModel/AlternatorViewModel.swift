@@ -54,6 +54,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
         }
         // Configure url based on the environment
         self.urlString = self.environment.url
+        debugPrint("[Bonnet Alternator] Environment: \(self.environment.rawValue)")
         
         super.init()
         self.webView.navigationDelegate = self
@@ -99,6 +100,7 @@ extension AlternatorViewModel {
     
     func loadUrl() {
         debugPrint("[Bonnet Alternator] URL: \(self.urlString)")
+        
         var updatedPath = self.urlString
         // Check if we have a saved path
         if let savedPath {
@@ -138,7 +140,7 @@ extension AlternatorViewModel {
     }
     
     // MARK: - Messaging toast
-    // Not in use at the moment
+    // Only used for testing
     
     @MainActor
     private func updateToast(with toast: Toast) {
@@ -161,12 +163,16 @@ extension AlternatorViewModel {
 }
 
 // MARK: - Message Handler
+
 extension AlternatorViewModel: MessageHandler {
     func didReceive(_ response: CommomResponseModel) {
         guard let message = response.data?.value else { return }
         
         if response.type == .browser {
             guard let url = URL(string: message), UIApplication.shared.canOpenURL(url) else { return }
+            
+            debugPrint("[Bonnet Alternator] Did receive url: \(message)")
+            
             DispatchQueue.main.async {
                 UIApplication.shared.open(url)
             }

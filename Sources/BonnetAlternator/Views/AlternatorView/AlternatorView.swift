@@ -56,7 +56,7 @@ struct AlternatorView: View {
                         ZStack {
                             Circle()
                                 .fill(Color.sdkGrey)
-                            Image(systemName: "line.3.horizontal")
+                            Image(systemName: "plus")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 15, height: 15)
@@ -91,6 +91,9 @@ struct AlternatorView: View {
             WebViewUI(webView: model.webView)
                 .onAppear {
                     self.model.loadUrl()
+                }
+                .onDisappear {
+                    debugPrint("[Bonnet Alternator] web view deallocated")
                 }
         }
         .updatePaddingWithKeyboardChanges(self.$model.allowKeyboardChanges)
