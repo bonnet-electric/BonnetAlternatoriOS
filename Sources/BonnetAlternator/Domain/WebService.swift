@@ -89,6 +89,8 @@ extension WebService: MessagingFormatterDelegate {
         "if (typeof window.postMessage === 'function') { " +
         "window.postMessage('\(content)'); " +  "} " + "})()"
         self.webView.evaluateJavaScript(jsCode)
+        
+        debugPrint("[Bonnet Alternator] [Web] JS code sent")
     }
 }
 

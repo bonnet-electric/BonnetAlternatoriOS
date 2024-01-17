@@ -54,6 +54,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
         }
         // Configure url based on the environment
         self.urlString = self.environment.url
+        debugPrint("[Bonnet Alternator] Environment: \(self.environment.rawValue)")
         
         super.init()
         self.webView.navigationDelegate = self
@@ -99,6 +100,7 @@ extension AlternatorViewModel {
     
     func loadUrl() {
         debugPrint("[Bonnet Alternator] URL: \(self.urlString)")
+        
         var updatedPath = self.urlString
         // Check if we have a saved path
         if let savedPath {
@@ -113,37 +115,6 @@ extension AlternatorViewModel {
         guard let url = URL(string: updatedPath) else { return }
         self.webView.load(URLRequest(url: url))
         self.webService.addListeners(self)
-    }
-    
-    // MARK: - Test environment
-    
-    func openBrowser() {
-        self.didReceive(.init(type: .browser, platform: .ios, data: .init(value: "https://www.google.co.uk/")))
-    }
-    
-    func requestJSToken() {
-        Task {
-            do {
-                guard let token = try await self.webService.tokenDelegate?.refreshToken() else {
-                    debugPrint("[Bonnet Alternator] TokenGeneratorDelegate haven't been assign")
-                    return
-                }
-                debugPrint("[Bonnet Alternator] Token generated for test: \(token)")
-                await self.updateToast(with: .init(style: .warning, message: "Generated token: \(token)", duration: 3, position: .bottom))
-                
-            } catch let error {
-                debugPrint("[Bonnet Alternator] Token could not be generated, error: \(error.message)")
-            }
-        }
-    }
-    
-    // MARK: - Messaging toast
-    // Not in use at the moment
-    
-    @MainActor
-    private func updateToast(with toast: Toast) {
-        guard self.environment == .staging else { return }
-        self.toast = toast
     }
     
     // MARK: - Communication
@@ -161,12 +132,16 @@ extension AlternatorViewModel {
 }
 
 // MARK: - Message Handler
+
 extension AlternatorViewModel: MessageHandler {
     func didReceive(_ response: CommomResponseModel) {
         guard let message = response.data?.value else { return }
         
         if response.type == .browser {
             guard let url = URL(string: message), UIApplication.shared.canOpenURL(url) else { return }
+            
+            debugPrint("[Bonnet Alternator] Did receive url: \(message)")
+            
             DispatchQueue.main.async {
                 UIApplication.shared.open(url)
             }

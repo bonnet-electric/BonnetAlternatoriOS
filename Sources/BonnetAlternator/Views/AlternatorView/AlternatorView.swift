@@ -44,28 +44,6 @@ struct AlternatorView: View {
                         .frame(width: 28, height: 28)
                 }
                 
-                if self.model.environment == .staging {
-                    Menu {
-                        Button("Test open Browser") {
-                            self.model.openBrowser()
-                        }
-                        Button("Test JWToken") {
-                            self.model.requestJSToken()
-                        }
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .fill(Color.sdkGrey)
-                            Image(systemName: "line.3.horizontal")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 15, height: 15)
-                                .foregroundColor(.black)
-                        }
-                        .frame(width: 28, height: 28)
-                    }
-                }
-                
                 Button {
                     withAnimation {
                         self.closeBottomSheetPresented = true
@@ -91,6 +69,9 @@ struct AlternatorView: View {
             WebViewUI(webView: model.webView)
                 .onAppear {
                     self.model.loadUrl()
+                }
+                .onDisappear {
+                    debugPrint("[Bonnet Alternator] web view deallocated")
                 }
         }
         .updatePaddingWithKeyboardChanges(self.$model.allowKeyboardChanges)
