@@ -44,7 +44,6 @@ struct AlternatorView: View {
                         .frame(width: 28, height: 28)
                 }
                 
-<<<<<<< HEAD
                 if self.model.environment == .staging {
                     Menu {
                         Button("Test open Browser") {
@@ -67,8 +66,6 @@ struct AlternatorView: View {
                     }
                 }
                 
-=======
->>>>>>> develop
                 Button {
                     withAnimation {
                         self.closeBottomSheetPresented = true
