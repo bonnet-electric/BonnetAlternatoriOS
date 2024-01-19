@@ -90,7 +90,7 @@ extension WebService: MessagingFormatterDelegate {
         "window.postMessage('\(content)'); " +  "} " + "})()"
         self.webView.evaluateJavaScript(jsCode)
         
-        debugPrint("[Bonnet Alternator] [Web] JS code sent")
+        debugPrint("[Bonnet Alternator] [JS] message sent")
     }
 }
 
@@ -99,7 +99,7 @@ extension WebService: WKScriptMessageHandler {
     internal func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         
         if message.name == "logHandler" {
-            debugPrint("[Bonnet Alternator] [Web] LOG: \(message.body as? String)")
+            debugPrint("[Bonnet Alternator] [JS] LOG: \(message.body as? String)")
             return
         }
         
@@ -129,7 +129,7 @@ extension WebService: WKScriptMessageHandler {
                 }
                 
             } catch let error {
-                debugPrint("[Bonent Alternator] received message error: \(error.message)")
+                debugPrint("[Bonent Alternator] [Response] received message error: \(error.message)")
                 
                 let decryptedResult: Result<CommomResponseModel, SecurityServiceError> = self.communicationService.decrypt(body)
                 
@@ -137,12 +137,12 @@ extension WebService: WKScriptMessageHandler {
                 case .success(let result):
                     
                     if result.type == .unowned {
-                        debugPrint("[Bonent Alternator] received message with unowned type: \(body)")
+                        debugPrint("[Bonent Alternator] [Response] received message with unowned type: \(body)")
                         return
                     }
                     
                     if let type = result.type?.rawValue {
-                        debugPrint("[Bonent Alternator] received message of type: \(type)")
+                        debugPrint("[Bonent Alternator] [Response] received message of type: \(type)")
                     }
                     
                     if result.type == .token {
