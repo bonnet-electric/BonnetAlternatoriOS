@@ -97,6 +97,7 @@ extension AlternatorViewModel {
     
     // MARK: - Public func
     
+    @MainActor
     func loadUrl() {
         var updatedPath = self.urlString
         // Check if we have a saved path
