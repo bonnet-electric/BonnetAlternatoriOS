@@ -40,7 +40,7 @@ class SecuredCommunicationService {
         let data = CommomResponseModel(type: .handShake, data: .init(key: iOSPublicKey, jwt: token, filters: filters))
         guard let content = try? data.toString() else { return }
         
-        // Keep track for app id
+        // Print app id to confirm proper set up
         if let appId = data.data?.app_id {
             debugPrint("[Bonnet Alternator] App id: \(appId)")
         }
