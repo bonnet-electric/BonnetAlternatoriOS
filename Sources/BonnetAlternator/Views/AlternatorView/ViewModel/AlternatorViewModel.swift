@@ -110,10 +110,13 @@ extension AlternatorViewModel {
         }
         
         debugPrint("[Bonnet Alternator] URL: \(updatedPath)")
-            
+        
         guard let url = URL(string: updatedPath) else { return }
-        self.webView.load(URLRequest(url: url))
-        self.webService.addListeners(self)
+        
+        DispatchQueue.main.async {
+            self.webView.load(URLRequest(url: url))
+            self.webService.addListeners(self)
+        }
     }
     
     // MARK: - Test environment
