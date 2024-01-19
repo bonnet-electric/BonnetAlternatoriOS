@@ -50,5 +50,9 @@ fileprivate class WebViewNavigationDelegate: NSObject, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         debugPrint("[Bonnet Alternator] [Web delegate] didFailProvisionalNavigation with error: \(error.message)")
     }
+    
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        debugPrint("[Bonnet Alternator] [Web delegate] contentProcessDidTerminate")
+    }
 }
 #endif
