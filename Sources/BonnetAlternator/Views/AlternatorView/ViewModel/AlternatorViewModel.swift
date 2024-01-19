@@ -57,7 +57,6 @@ class AlternatorViewModel: NSObject, ObservableObject {
         debugPrint("[Bonnet Alternator] Environment: \(self.environment.rawValue)")
         
         super.init()
-        self.webView.navigationDelegate = self
         self.webService.tokenDelegate = tokenDelegate
         self.addListeners()
     }
@@ -210,23 +209,6 @@ extension AlternatorViewModel: MessageHandler {
     
     func error(_ message: String) {
         debugPrint("[Bonnet Alternator] Did receive error: \(message)")
-    }
-}
-
-// MARK: - WKNavigationDelegate
-
-extension AlternatorViewModel: WKNavigationDelegate {
-    
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        debugPrint("[Bonnet Alternator] [Web delegate] didFinish navigation: \(navigation.description)")
-    }
-    
-    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        debugPrint("[Bonnet Alternator] [Web delegate] didFail navigation with error: \(error.message)")
-    }
-    
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        debugPrint("[Bonnet Alternator] [Web delegate] didFailProvisionalNavigation with error: \(error.message)")
     }
 }
 #endif
