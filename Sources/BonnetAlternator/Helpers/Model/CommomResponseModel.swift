@@ -38,7 +38,7 @@ struct CommomResponseModel: Codable {
     }
     
     struct DataType: Codable {
-        var app_id: String? = "com.bonnet"
+        var app_id: String? = Bundle.main.bundleIdentifier
         var key: String? = nil
         var jwt: String? = nil
         var filters: Filters? = nil

@@ -37,8 +37,12 @@ class SecuredCommunicationService {
         }
         
         // Generate content data need it to stablish connection
-        guard let content = try? CommomResponseModel(type: .handShake, data: .init(key: iOSPublicKey, jwt: token, filters: filters)).toString() else {
-            return
+        let data = CommomResponseModel(type: .handShake, data: .init(key: iOSPublicKey, jwt: token, filters: filters))
+        guard let content = try? data.toString() else { return }
+        
+        // Print app id to confirm proper set up
+        if let appId = data.data?.app_id {
+            debugPrint("[Bonnet Alternator] App id: \(appId)")
         }
         
         // Create message formated
