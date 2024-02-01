@@ -42,7 +42,7 @@ extension AlternatorViewModel: MessageHandler {
            let latitude = response.data?.latitude,
            let longitude = response.data?.longitude
         {
-            self.openMaps(with: .init(latitude: latitude, longitude: longitude))
+            self.openMaps(with: .init(latitude: latitude, longitude: longitude), name: response.data?.operator)
             return
         }
         
@@ -68,9 +68,10 @@ extension AlternatorViewModel: MessageHandler {
     
     // MARK: - Actions
     
-    private func openMaps(with coordinate: CLLocationCoordinate2D) {
+    private func openMaps(with coordinate: CLLocationCoordinate2D, name: String?) {
         let placemark = MKPlacemark(coordinate: coordinate)
         let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = name
         let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
         
         DispatchQueue.main.async {

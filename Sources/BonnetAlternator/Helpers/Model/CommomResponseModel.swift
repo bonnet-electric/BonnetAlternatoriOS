@@ -45,6 +45,7 @@ struct CommomResponseModel: Codable {
         var value: String? = nil
         var latitude: Double? = nil
         var longitude: Double? = nil
+        var `operator`: String? = nil
         var setting: Bool? = nil
     }
 }
