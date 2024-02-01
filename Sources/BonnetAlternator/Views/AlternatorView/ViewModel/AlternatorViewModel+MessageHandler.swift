@@ -14,10 +14,10 @@ import MapKit
 extension AlternatorViewModel: MessageHandler {
     
     func didReceive(_ response: CommomResponseModel) {
-        guard let message = response.data?.value else { return }
-        
         if response.type == .browser {
-            guard let url = URL(string: message), UIApplication.shared.canOpenURL(url) else { return }
+            guard let message = response.data?.value,
+                  let url = URL(string: message), UIApplication.shared.canOpenURL(url)
+            else { return }
             
             debugPrint("[Bonnet Alternator] Did receive url: \(message)")
             
@@ -55,8 +55,6 @@ extension AlternatorViewModel: MessageHandler {
                 self.allowKeyboardChanges = !isLocationDetails
             }
         }
-        
-        debugPrint("[Bonnet Alternator] Did receive message: \(message)")
     }
     
     @MainActor
