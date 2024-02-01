@@ -10,10 +10,9 @@ import CoreLocation
 import MapKit
 
 class UserLocationService: NSObject, ObservableObject {
-    
     // MARK: - Published
     
-    @Published var currentCoordinate: Coordinate? = nil
+    @Published var currentCoordinate: CLLocationCoordinate2D? = nil
     
     // MARK: - Parameters
     
@@ -97,10 +96,19 @@ extension UserLocationService: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let locationCoordinate = locations.last?.coordinate {
-            let newCoordinate = Coordinate(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
             
-            guard newCoordinate != self.currentCoordinate else { return }
-            self.currentCoordinate = newCoordinate
+            if let currentCoordinate {
+                let distance = currentCoordinate.distance(to: locationCoordinate)
+                
+                // Only update the new distance if the distance between the new and old if higher that 5
+                if distance > 5 {
+                    self.currentCoordinate = locationCoordinate
+                }
+                
+            } else {
+                // First user location update
+                self.currentCoordinate = locationCoordinate
+            }
         }
     }
     

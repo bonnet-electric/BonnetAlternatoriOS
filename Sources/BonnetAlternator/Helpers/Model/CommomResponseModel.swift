@@ -22,7 +22,7 @@ struct CommomResponseModel: Codable {
         case browser = "BROWSER"
         case loading = "LOADING"
         case filters = "FILTER"
-        // Clearly mention if intecom its beeing open (TRUE) and when its close (FALSE)
+        // Clearly mention if intercom is beeing open (TRUE) and when is close (FALSE)
         case intercom = "INTERCOM"
         case unowned
         

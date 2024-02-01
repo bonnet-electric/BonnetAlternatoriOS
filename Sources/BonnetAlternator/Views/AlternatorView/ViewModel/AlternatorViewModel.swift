@@ -6,10 +6,10 @@
 //
 
 #if os(iOS)
-import Foundation
 import WebKit
 import SwiftUI
 import Combine
+import CoreLocation
 
 class AlternatorViewModel: NSObject, ObservableObject {
     // MARK: - Published
@@ -91,7 +91,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
 extension AlternatorViewModel {
     
     // MARK: - Variables
-    private var savedPath: SavedPath? {
+    internal var savedPath: SavedPath? {
         self.userDefaultHelper.get(forKey: .userAlternatorPath)
     }
     
@@ -151,7 +151,7 @@ extension AlternatorViewModel {
     // MARK: - Communication
     
     @MainActor
-    private func updateLocation(with coordinates: Coordinate) async {
+    private func updateLocation(with coordinates: CLLocationCoordinate2D) async {
         do {
             let content = try CommomResponseModel(type: .userLocation, data: .init(key: nil, jwt: nil, value: nil, latitude: coordinates.latitude, longitude: coordinates.longitude)).toString()
             self.webService.post(content, includeFormat: false, encrypted: true)
@@ -159,57 +159,6 @@ extension AlternatorViewModel {
         } catch let error {
             debugPrint("[Bonnet Alternator] Couldn't update coordinates, with error: \(error.message)")
         }
-    }
-}
-
-// MARK: - Message Handler
-
-extension AlternatorViewModel: MessageHandler {
-    func didReceive(_ response: CommomResponseModel) {
-        guard let message = response.data?.value else { return }
-        
-        if response.type == .browser {
-            guard let url = URL(string: message), UIApplication.shared.canOpenURL(url) else { return }
-            
-            debugPrint("[Bonnet Alternator] Did receive url: \(message)")
-            
-            DispatchQueue.main.async {
-                UIApplication.shared.open(url)
-            }
-            return
-        }
-        
-        if response.type == .intercom,
-           let isIntercomOpen = response.data?.setting
-        {
-            // Intercom have their own listener to update the view, so the keyboard changes should not happen when the keyboard its open from Intercom
-            self.isIntercomOpen = isIntercomOpen
-            DispatchQueue.main.async {
-                self.allowKeyboardChanges = !isIntercomOpen
-            }
-            return
-        }
-        
-        if response.type == .path,
-           let path = self.savedPath?.path
-        {
-            // Dont use keyboard changes if we are on location details (search)
-            let isLocationDetails = path.contains("/locations/")
-            DispatchQueue.main.async {
-                self.allowKeyboardChanges = !isLocationDetails
-            }
-        }
-        
-        debugPrint("[Bonnet Alternator] Did receive message: \(message)")
-    }
-    
-    @MainActor
-    func updateLoader(_ loading: Bool) {
-        self.isLoading = loading
-    }
-    
-    func error(_ message: String) {
-        debugPrint("[Bonnet Alternator] Did receive error: \(message)")
     }
 }
 #endif

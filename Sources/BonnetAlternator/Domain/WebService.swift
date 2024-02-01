@@ -97,7 +97,7 @@ extension WebService: WKScriptMessageHandler {
     internal func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         
         if message.name == "logHandler" {
-            debugPrint("[Bonnet Alternator] [JS] LOG: \(message.body as? String)")
+            debugPrint("[Bonnet Alternator] [WS] LOG: \(message.body as? String)")
             return
         }
         
