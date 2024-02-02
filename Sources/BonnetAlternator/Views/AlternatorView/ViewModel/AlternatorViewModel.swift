@@ -86,8 +86,10 @@ class AlternatorViewModel: NSObject, ObservableObject {
             Task { await self.updateLocation(with: coordinate) }
         }.store(in: &cancellables)
         
-        guard self.userLocationService.isUserPermissionForLocationTrackingGranted else { return }
-        self.userLocationService.startUpdatingLocation()
+        // Start updating if location tracking is granted
+        if self.userLocationService.isUserPermissionForLocationTrackingGranted {
+            self.userLocationService.startUpdatingLocation()
+        }
     }
 }
 

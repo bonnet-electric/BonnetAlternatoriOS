@@ -8,6 +8,7 @@
 import Foundation
 import WebKit
 import SwiftUI
+import CoreLocation
 import BFSecurity
 
 final class WebService: NSObject {
@@ -98,7 +99,11 @@ extension WebService: WKScriptMessageHandler {
     internal func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         
         if message.name == "logHandler" {
-            debugPrint("[Bonnet Alternator] [WS] LOG: \(message.body as? String)")
+            if let body = message.body as? String,
+               !body.contains("key")
+            {
+                debugPrint("[Bonnet Alternator] [WS] LOG: \(message.body as? String)")
+            }
             return
         }
         
