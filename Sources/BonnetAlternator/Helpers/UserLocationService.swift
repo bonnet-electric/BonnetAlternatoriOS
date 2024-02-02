@@ -10,14 +10,27 @@ import CoreLocation
 import MapKit
 
 class UserLocationService: NSObject, ObservableObject {
-    // MARK: - Published
+    static let shared: UserLocationService = .init()
     
+    // MARK: - Published
     @Published var currentCoordinate: CLLocationCoordinate2D? = nil
     
     // MARK: - Parameters
     
     private let locationManager = CLLocationManager()
     private(set) var isEnabled: Bool = false
+    
+    var isUserPermissionForLocationTrackingGranted: Bool {
+        switch self.locationManager.authorizationStatus {
+        case .authorizedAlways, .authorizedWhenInUse:
+            return true
+            
+        default:
+            return false
+        }
+    }
+    
+    // MARK: - Init
     
     override init() {
         super.init()

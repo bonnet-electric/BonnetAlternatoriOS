@@ -7,6 +7,7 @@
 
 import Foundation
 import CryptoKit
+import CoreLocation
 import BFSecurity
 
 protocol MessagingFormatterDelegate {
@@ -28,7 +29,11 @@ class SecuredCommunicationService {
     // MARK: - Accesible functions
     
     @MainActor
-    func establishHandShake(with jsPublicKey: String, token: String, filters: Filters?) throws {
+    func establishHandShake(with jsPublicKey: String, 
+                            token: String,
+                            coordinates: CLLocationCoordinate2D?,
+                            filters: Filters?) throws
+    {
         // Generate public key
         let iOSPublicKey = self.securityService.getPublicKeyToShared()
         

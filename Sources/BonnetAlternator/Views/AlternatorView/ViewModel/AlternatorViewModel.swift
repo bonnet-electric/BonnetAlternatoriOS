@@ -42,7 +42,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
         // Initialise web service with new webview
         self.webService = .init(webView: newWebView)
         
-        self.userLocationService = UserLocationService()
+        self.userLocationService = UserLocationService.shared
         
         // Configure environment with set values
         if let envString = UsersDefaultHelper.shared.getString(forKey: .environment),
@@ -85,6 +85,9 @@ class AlternatorViewModel: NSObject, ObservableObject {
             else { return }
             Task { await self.updateLocation(with: coordinate) }
         }.store(in: &cancellables)
+        
+        guard self.userLocationService.isUserPermissionForLocationTrackingGranted else { return }
+        self.userLocationService.startUpdatingLocation()
     }
 }
 

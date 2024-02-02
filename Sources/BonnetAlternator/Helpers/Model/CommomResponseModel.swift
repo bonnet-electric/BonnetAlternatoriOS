@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct CommomResponseModel: Codable {
     var type: `Type`?
@@ -41,6 +42,7 @@ struct CommomResponseModel: Codable {
         var app_id: String? = Bundle.main.bundleIdentifier
         var key: String? = nil
         var jwt: String? = nil
+        var coordinates: CLLocationCoordinate2D? = nil
         var filters: Filters? = nil
         var value: String? = nil
         var latitude: Double? = nil

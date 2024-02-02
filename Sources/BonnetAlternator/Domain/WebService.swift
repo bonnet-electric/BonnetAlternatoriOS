@@ -21,6 +21,7 @@ final class WebService: NSObject {
     private var messageHandler: MessageHandler?
     private let communicationService: SecuredCommunicationService = .shared
     private let userDefaultsHelper: UsersDefaultHelper = .shared
+    private let userLocationService: UserLocationService = .shared
     
     var tokenDelegate: TokenGeneratorDelegate?
     
@@ -122,7 +123,8 @@ extension WebService: WKScriptMessageHandler {
                     }
                     
                     let filters: Filters? = self.userDefaultsHelper.get(forKey: .filters)
-                    try await self.communicationService.establishHandShake(with: jsPublicKey, token: newToken, filters: filters)
+                    let coordinates: CLLocationCoordinate2D? = self.userLocationService.currentCoordinate
+                    try await self.communicationService.establishHandShake(with: jsPublicKey, token: newToken, coordinates: coordinates, filters: filters)
                     self.connectionCompleted?()
                 }
                 
