@@ -14,21 +14,12 @@ class UserLocationService: NSObject, ObservableObject {
     
     // MARK: - Published
     @Published var currentCoordinate: CLLocationCoordinate2D? = nil
+    @Published var authorizationStatus: CLAuthorizationStatus = .denied
     
     // MARK: - Parameters
     
     private let locationManager = CLLocationManager()
     private(set) var isEnabled: Bool = false
-    
-    var isUserPermissionForLocationTrackingGranted: Bool {
-        switch self.locationManager.authorizationStatus {
-        case .authorizedAlways, .authorizedWhenInUse:
-            return true
-            
-        default:
-            return false
-        }
-    }
     
     // MARK: - Init
     
@@ -39,6 +30,7 @@ class UserLocationService: NSObject, ObservableObject {
         self.locationManager.allowsBackgroundLocationUpdates = false
         self.locationManager.pausesLocationUpdatesAutomatically = false
         self.locationManager.delegate = self
+        self.authorizationStatus = self.locationManager.authorizationStatus
     }
     
     // MARK: - Structures
@@ -95,12 +87,23 @@ class UserLocationService: NSObject, ObservableObject {
             self.startUpdatingLocation()
         case .denied:
             print("user tap 'disallow' on the permission dialog, cant get location data")
+            // Clear current coordinate if user have denied location
+            self.currentCoordinate = nil
         case .restricted:
             print("parental control setting disallow location data")
+            // Clear current coordinate if user have denied location
+            self.currentCoordinate = nil
         case .notDetermined:
             print("the location permission dialog haven't shown before, user haven't tap allow/disallow")
+            // Clear current coordinate if user have denied location
+            self.currentCoordinate = nil
         @unknown default:
             print("ERROR: Unhendeled CLLocationManager Authorization status")
+        }
+        
+        // Only update if status changed
+        if status != self.authorizationStatus {
+            self.authorizationStatus = status
         }
     }
 }
@@ -114,7 +117,7 @@ extension UserLocationService: CLLocationManagerDelegate {
                 let distance = currentCoordinate.distance(to: locationCoordinate)
                 
                 // Only update the new distance if the distance between the new and old if higher that 5
-                if distance > 5 {
+                if distance > 6 {
                     self.currentCoordinate = locationCoordinate
                 }
                 
@@ -129,5 +132,16 @@ extension UserLocationService: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         self.isEnabled = manager.authorizationStatus != .denied && manager.authorizationStatus != .restricted
         self.locationManagerDidChangeAuthorizationStatus(manager, status: manager.authorizationStatus)
+    }
+}
+
+extension CLAuthorizationStatus {
+    // Check is current status allow any type of location tracking
+    var permissionForLocationTrackingGranted: Bool {
+        switch self {
+        case .authorizedAlways, .authorizedWhenInUse:
+            return true
+        default: return false
+        }
     }
 }

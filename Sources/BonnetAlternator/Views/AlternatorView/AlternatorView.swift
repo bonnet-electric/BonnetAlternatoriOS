@@ -90,7 +90,7 @@ struct AlternatorView: View {
             
             WebViewUI(webView: model.webView)
                 .onAppear {
-                    self.model.loadUrl()
+                    Task { await self.model.loadUrl() }
                 }
                 .onDisappear {
                     debugPrint("[Bonnet Alternator] web view deallocated")
@@ -101,6 +101,8 @@ struct AlternatorView: View {
         .background(Color.white.edgesIgnoringSafeArea(.all))
         .onAppear(perform: {
             self.model.isLoading = true
+            // Start updating if location tracking is granted
+            self.model.startUpdatingUserLocation()
         })
         .presentToast($model.toast)
         .presentBottomSheet(presented: self.$closeBottomSheetPresented,

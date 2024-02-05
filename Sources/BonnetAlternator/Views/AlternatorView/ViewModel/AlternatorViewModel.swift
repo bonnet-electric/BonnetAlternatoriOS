@@ -14,13 +14,14 @@ import CoreLocation
 class AlternatorViewModel: NSObject, ObservableObject {
     // MARK: - Published
     @Published var toast: Toast? = nil
-    @Published var sendMessageDisable: Bool = true
     @Published var isLoading: Bool = true
     @Published var allowKeyboardChanges: Bool = true
     
     // MARK: - Parameters
     let webView: WKWebView
     let environment: AlternatorEnvironment
+    
+    private var webViewLoaded: Bool = false
     private var cancellables: Set<AnyCancellable> = []
     private let urlString: String
     
@@ -71,7 +72,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
             guard let self else { return }
             Task {
                 await MainActor.run(body: {
-                    self.sendMessageDisable = false
+                    self.webViewLoaded = true
                     self.userLocationService.askUserPermissionForWhenInUseAuthorizationIfNeeded()
                 })
             }
@@ -79,17 +80,15 @@ class AlternatorViewModel: NSObject, ObservableObject {
         
         // Listen to user's current location
         self.userLocationService.$currentCoordinate.receive(on: DispatchQueue.main).sink { [weak self] newValue in
-            guard let self,
-                  let coordinate = newValue,
-                  self.sendMessageDisable == false
-            else { return }
+            guard let self, let coordinate = newValue, self.webViewLoaded else { return }
             Task { await self.updateLocation(with: coordinate) }
         }.store(in: &cancellables)
         
-        // Start updating if location tracking is granted
-        if self.userLocationService.isUserPermissionForLocationTrackingGranted {
-            self.userLocationService.startUpdatingLocation()
-        }
+        // Check if permissions have changed during communication
+        self.userLocationService.$authorizationStatus.receive(on: DispatchQueue.main).sink { [weak self] newValue in
+            guard let self, let userCoordinates = self.userLocationService.currentCoordinate else { return }
+            Task { await self.updateLocation(with: userCoordinates) }
+        }.store(in: &cancellables)
     }
 }
 
@@ -103,7 +102,7 @@ extension AlternatorViewModel {
     // MARK: - Public func
     
     @MainActor
-    func loadUrl() {
+    func loadUrl() async {
         var updatedPath = self.urlString
         // Check if we have a saved path
         if let savedPath {
@@ -115,11 +114,25 @@ extension AlternatorViewModel {
             self.userDefaultHelper.removeObject(forKey: .userAlternatorPath)
         }
         
-        debugPrint("[Bonnet Alternator] URL: \(updatedPath)")
-            
         guard let url = URL(string: updatedPath) else { return }
-        self.webView.load(URLRequest(url: url))
+        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData)
+        if self.webViewLoaded {
+            // Clean cache to allow the webview to initialise the request from the begging
+            await WKWebsiteDataStore.default().removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), modifiedSince: Date(timeIntervalSince1970: 0))
+        }
+        self.webView.load(request)
         self.webService.addListeners(self)
+    }
+    
+    func startUpdatingUserLocation() {
+        if self.userLocationService.authorizationStatus.permissionForLocationTrackingGranted {
+            self.userLocationService.startUpdatingLocation()
+        }
+        
+        // If the communication have been already established we need to update the user location if available
+        if self.webViewLoaded, let coordinate = self.userLocationService.currentCoordinate {
+            Task { await self.updateLocation(with: coordinate) }
+        }
     }
     
     // MARK: - Test environment
