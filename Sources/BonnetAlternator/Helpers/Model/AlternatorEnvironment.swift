@@ -15,7 +15,7 @@ public enum AlternatorEnvironment: String, Equatable {
         case .staging:
             return "https://test.alternator.bonnetapps.com"
         case .production:
-            return "https://alternator.bonnetapps.com/"
+            return "https://alternator.bonnetapps.com"
         }
     }
 }
