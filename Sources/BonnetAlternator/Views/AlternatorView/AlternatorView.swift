@@ -113,6 +113,7 @@ struct AlternatorView: View {
                     .font(.body)
                     .fontWeight(.semibold)
                     .multilineTextAlignment(.center)
+                    .foregroundColor(.black)
                 
                 HStack(spacing: 16) {
                     Button {

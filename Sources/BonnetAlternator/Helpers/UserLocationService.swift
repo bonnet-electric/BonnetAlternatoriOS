@@ -13,6 +13,7 @@ class UserLocationService: NSObject, ObservableObject {
     static let shared: UserLocationService = .init()
     
     // MARK: - Published
+    
     @Published var currentCoordinate: CLLocationCoordinate2D? = nil
     @Published var authorizationStatus: CLAuthorizationStatus = .denied
     
@@ -20,17 +21,31 @@ class UserLocationService: NSObject, ObservableObject {
     
     private let locationManager = CLLocationManager()
     private(set) var isEnabled: Bool = false
+    // Coordinates debouncer
+    private let userLocationDebouncer = Debouncer<CLLocationCoordinate2D?>()
     
     // MARK: - Init
     
     override init() {
         super.init()
         
-        self.locationManager.activityType = .automotiveNavigation
-        self.locationManager.allowsBackgroundLocationUpdates = false
+        self.locationManager.distanceFilter = 5
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         self.locationManager.pausesLocationUpdatesAutomatically = false
+        self.locationManager.showsBackgroundLocationIndicator = true
         self.locationManager.delegate = self
         self.authorizationStatus = self.locationManager.authorizationStatus
+        self.addListeners()
+    }
+    
+    deinit {
+        self.userLocationDebouncer.cancel()
+    }
+    
+    private func addListeners() {
+        self.userLocationDebouncer.debounce(for: .seconds(4), scheduler: DispatchQueue.main) { newCoordinates in
+            self.currentCoordinate = newCoordinates
+        }
     }
     
     // MARK: - Structures
@@ -111,19 +126,22 @@ class UserLocationService: NSObject, ObservableObject {
 extension UserLocationService: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let locationCoordinate = locations.last?.coordinate {
-            
-            if let currentCoordinate {
-                let distance = currentCoordinate.distance(to: locationCoordinate)
-                
-                // Only update the new distance if the distance between the new and old if higher that 5
-                if distance > 6 {
-                    self.currentCoordinate = locationCoordinate
+        
+        if let clLocation = locations.last {
+            if clLocation.horizontalAccuracy <= manager.desiredAccuracy {
+                if let oldLocation = self.currentCoordinate {
+                    let distance = oldLocation.distance(to: clLocation.coordinate)
+                    // We will only update the user location if the position change for at least 5 meters
+                    guard distance > 5 else { return }
+                    // Sent to debouncer to handle updates
+                    self.userLocationDebouncer.send(clLocation.coordinate)
+                    return
                 }
-                
-            } else {
-                // First user location update
-                self.currentCoordinate = locationCoordinate
+            }
+            
+            if self.currentCoordinate == nil {
+                // If this is the first fetch we just assign the values directly
+                self.currentCoordinate = clLocation.coordinate
             }
         }
     }
