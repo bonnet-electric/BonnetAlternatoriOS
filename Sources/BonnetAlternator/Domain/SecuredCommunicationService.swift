@@ -43,6 +43,9 @@ class SecuredCommunicationService {
         
         if let coordinates {
             debugPrint("[Bonnet Alternator] Added coordinates: \(coordinates)")
+            LogService.shared.addLog("Send handshake with coordinates")
+        } else {
+            LogService.shared.addLog("Send handshake without coordinates")
         }
         
         // Generate content data need it to stablish connection
@@ -63,7 +66,9 @@ class SecuredCommunicationService {
         do {
             self.sharedSecret = try self.securityService.deriveSharedSecretKey(for: jsPublicKey)
             debugPrint("[Bonnet Alternator] Shared Secret created")
+            LogService.shared.addLog("Shared Secret created")
         } catch let error {
+            LogService.shared.addLog("Shared Secret error: \(error.localizedDescription)")
             debugPrint("[Bonnet Alternator] Shared Secret error: \(error.message)")
         }
     }

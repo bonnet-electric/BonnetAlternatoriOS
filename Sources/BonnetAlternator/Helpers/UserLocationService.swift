@@ -41,6 +41,7 @@ class UserLocationService: NSObject, ObservableObject {
     
     private func addListeners() {
         self.userLocationDebouncer.debounce(for: .seconds(4), scheduler: DispatchQueue.main) { newCoordinates in
+            LogService.shared.addLog("Debouncer sent new location")
             self.currentCoordinate = newCoordinates
         }
     }
@@ -128,8 +129,11 @@ extension UserLocationService: CLLocationManagerDelegate {
                 if let oldLocation = self.currentCoordinate {
                     let distance = oldLocation.distance(to: clLocation.coordinate)
                     // We will only update the user location if the position change for at least 5 meters
-                    guard distance > 5 else { return }
+                    guard distance > 5 else { 
+                        LogService.shared.addLog("New location under 5 meters")
+                        return }
                     // Sent to debouncer to handle updates
+                    LogService.shared.addLog("New location added to debouncer")
                     self.userLocationDebouncer.send(clLocation.coordinate)
                     return
                 }
@@ -137,6 +141,7 @@ extension UserLocationService: CLLocationManagerDelegate {
             
             if self.currentCoordinate == nil {
                 // If this is the first fetch we just assign the values directly
+                LogService.shared.addLog("Added first coordinates")
                 self.currentCoordinate = clLocation.coordinate
             }
         }

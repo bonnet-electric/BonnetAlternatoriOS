@@ -17,11 +17,14 @@ class AlternatorViewModel: NSObject, ObservableObject {
     @Published var isLoading: Bool = true
     @Published var allowKeyboardChanges: Bool = true
     
+    @Published var viewDidLoad: Bool = false
+    
     // MARK: - Parameters
     let webView: WKWebView
     let environment: AlternatorEnvironment
     
     private var webViewLoaded: Bool = false
+    private var enterBackground: Bool = false
     private var cancellables: Set<AnyCancellable> = []
     private let urlString: String
     
@@ -74,7 +77,14 @@ class AlternatorViewModel: NSObject, ObservableObject {
             Task {
                 await MainActor.run(body: {
                     self.webViewLoaded = true
-                    self.userLocationService.askUserPermissionForWhenInUseAuthorizationIfNeeded()
+                    
+                    if self.userLocationService.authorizationStatus.permissionForLocationTrackingGranted,
+                       let coordinate = self.userLocationService.currentCoordinate
+                    {
+                        Task { await self.updateLocation(with: coordinate) }
+                    } else {
+                        self.userLocationService.askUserPermissionForWhenInUseAuthorizationIfNeeded()
+                    }
                 })
             }
         }
@@ -93,12 +103,19 @@ class AlternatorViewModel: NSObject, ObservableObject {
         
         NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil).sink { _ in
             debugPrint("[Bonnet Alternator] [VM] Enter Foreground")
+            
+            LogService.shared.addLog("Enter Foreground")
+            guard self.enterBackground else { return }
+            debugPrint("[Bonnet Alternator] [VM] Enter Foreground action")
+            LogService.shared.addLog("Enter Foreground action")
+            self.enterBackground = false
             Task { await self.loadUrl() }
         }.store(in: &cancellables)
         
-        
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification, object: nil).sink { _ in
             debugPrint("[Bonnet Alternator] [VM] Enter background")
+            LogService.shared.addLog("Enter background")
+            self.enterBackground = true
             self.pauseStopProcess()
         }.store(in: &cancellables)
     }
@@ -107,6 +124,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
     
     func pauseStopProcess() {
         debugPrint("[Bonnet Alternator] [VM] Stop Process")
+        self.viewDidLoad = false
         self.webView.stopLoading()
         self.webService.removeListeners()
     }
@@ -190,11 +208,17 @@ extension AlternatorViewModel {
     
     @MainActor
     private func updateLocation(with coordinates: CLLocationCoordinate2D) async {
+        guard self.webViewLoaded else { return }
+        
         do {
             let content = try CommomResponseModel(type: .userLocation, data: .init(key: nil, jwt: nil, value: nil, latitude: coordinates.latitude, longitude: coordinates.longitude)).toString()
             self.webService.post(content, includeFormat: false, encrypted: true)
+            
+            LogService.shared.addLog("Coordinates updates: \(coordinates.latitude), \(coordinates.longitude)")
+            
             debugPrint("[Bonnet Alternator] Coordinates updated")
         } catch let error {
+            LogService.shared.addLog("Couldn't update coordinates, with error: \(error.localizedDescription)")
             debugPrint("[Bonnet Alternator] Couldn't update coordinates, with error: \(error.message)")
         }
     }
