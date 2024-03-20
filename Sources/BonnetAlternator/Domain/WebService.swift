@@ -32,6 +32,11 @@ final class WebService: NSObject {
         self.communicationService.messagingDelegate = self
     }
     
+    deinit {
+        debugPrint("[Bonnet Alternator] [WS] Deallocated")
+        self.removeListeners()
+    }
+    
     // MARK: - Function
     
     /// Add neccesary listener to be able to receive messages from webView
@@ -41,6 +46,7 @@ final class WebService: NSObject {
         
         let contentController = self.webView.configuration.userContentController
         contentController.removeAllScriptMessageHandlers()
+        contentController.removeAllUserScripts()
         // Add the message delegate listener to the content controller
         contentController.add(self, name: "toggleMessageHandler")
         
@@ -49,6 +55,14 @@ final class WebService: NSObject {
         let script = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: false)
         contentController.addUserScript(script)
         contentController.add(self, name: "logHandler")
+    }
+    
+    func removeListeners() {
+        self.messageHandler = nil
+        
+        let contentController = self.webView.configuration.userContentController
+        contentController.removeAllScriptMessageHandlers()
+        contentController.removeAllUserScripts()
     }
     
     /// Prepare common string to be injected on the required format to the webView

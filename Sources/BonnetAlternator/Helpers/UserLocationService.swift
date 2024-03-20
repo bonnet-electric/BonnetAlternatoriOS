@@ -13,12 +13,10 @@ class UserLocationService: NSObject, ObservableObject {
     static let shared: UserLocationService = .init()
     
     // MARK: - Published
-    
     @Published var currentCoordinate: CLLocationCoordinate2D? = nil
     @Published var authorizationStatus: CLAuthorizationStatus = .denied
     
     // MARK: - Parameters
-    
     private let locationManager = CLLocationManager()
     private(set) var isEnabled: Bool = false
     // Coordinates debouncer
@@ -32,7 +30,6 @@ class UserLocationService: NSObject, ObservableObject {
         self.locationManager.distanceFilter = 5
         self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         self.locationManager.pausesLocationUpdatesAutomatically = false
-        self.locationManager.showsBackgroundLocationIndicator = true
         self.locationManager.delegate = self
         self.authorizationStatus = self.locationManager.authorizationStatus
         self.addListeners()
@@ -126,7 +123,6 @@ class UserLocationService: NSObject, ObservableObject {
 extension UserLocationService: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
         if let clLocation = locations.last {
             if clLocation.horizontalAccuracy <= manager.desiredAccuracy {
                 if let oldLocation = self.currentCoordinate {

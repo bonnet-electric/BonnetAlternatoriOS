@@ -41,6 +41,10 @@ class SecuredCommunicationService {
             debugPrint("[Bonnet Alternator] Added filters: \(filters)")
         }
         
+        if let coordinates {
+            debugPrint("[Bonnet Alternator] Added coordinates: \(coordinates)")
+        }
+        
         // Generate content data need it to stablish connection
         let data = CommomResponseModel(type: .handShake, data: .init(key: iOSPublicKey, jwt: token, coordinates: coordinates, filters: filters))
         guard let content = try? data.toString() else { return }

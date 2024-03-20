@@ -90,9 +90,13 @@ struct AlternatorView: View {
             
             WebViewUI(webView: model.webView)
                 .onAppear {
-                    Task { await self.model.loadUrl() }
+                    Task {
+                        debugPrint("[Bonnet Alternator] web view appeared")
+                        await self.model.loadUrl()
+                    }
                 }
                 .onDisappear {
+                    self.model.pauseStopProcess()
                     debugPrint("[Bonnet Alternator] web view deallocated")
                 }
         }

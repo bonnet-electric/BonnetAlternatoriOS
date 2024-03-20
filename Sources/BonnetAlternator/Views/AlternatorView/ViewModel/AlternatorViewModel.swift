@@ -63,6 +63,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
     }
     
     deinit {
+        debugPrint("[Bonnet Alternator] [VM] Deinit")
         self.cancellables.removeAll()
     }
     
@@ -89,6 +90,25 @@ class AlternatorViewModel: NSObject, ObservableObject {
             guard let self, let userCoordinates = self.userLocationService.currentCoordinate else { return }
             Task { await self.updateLocation(with: userCoordinates) }
         }.store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil).sink { _ in
+            debugPrint("[Bonnet Alternator] [VM] Enter Foreground")
+            Task { await self.loadUrl() }
+        }.store(in: &cancellables)
+        
+        
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification, object: nil).sink { _ in
+            debugPrint("[Bonnet Alternator] [VM] Enter background")
+            self.pauseStopProcess()
+        }.store(in: &cancellables)
+    }
+    
+    // MARK: - Lifecycle
+    
+    func pauseStopProcess() {
+        debugPrint("[Bonnet Alternator] [VM] Stop Process")
+        self.webView.stopLoading()
+        self.webService.removeListeners()
     }
 }
 
