@@ -11,7 +11,9 @@ import SwiftUI
 struct AlternatorView: View {
     @StateObject private var model: AlternatorViewModel
     @Binding var isPresented: Bool
+    
     @State private var closeBottomSheetPresented: Bool = false
+    @State private var viewDidLoad: Bool = false
     
     var parentController: UIViewController?
     private let logoImage: LogoIcon?
@@ -90,17 +92,24 @@ struct AlternatorView: View {
             
             WebViewUI(webView: model.webView)
                 .onAppear {
-                    Task { await self.model.loadUrl() }
+                    Task {
+                        debugPrint("[Bonnet Alternator] Web view appeared")
+                        await self.model.loadUrl()
+                    }
                 }
                 .onDisappear {
-                    debugPrint("[Bonnet Alternator] web view deallocated")
+                    debugPrint("[Bonnet Alternator] Web view deallocated")
+                    self.model.pauseStopProcess()
                 }
         }
         .updatePaddingWithKeyboardChanges(self.$model.allowKeyboardChanges)
         .edgesIgnoringSafeArea(.bottom)
         .background(Color.white.edgesIgnoringSafeArea(.all))
         .onAppear(perform: {
+            guard !self.viewDidLoad else { return }
+            debugPrint("[Bonnet Alternator] View did load")
             self.model.isLoading = true
+            self.viewDidLoad = true
             // Start updating if location tracking is granted
             self.model.startUpdatingUserLocation()
         })

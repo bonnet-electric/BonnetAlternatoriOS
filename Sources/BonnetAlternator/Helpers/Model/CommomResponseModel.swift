@@ -33,9 +33,7 @@ struct CommomResponseModel: Codable {
     }
 
     enum Platform: String, Codable {
-        case ios
-        case web
-        case android
+        case ios, web, android
     }
     
     struct DataType: Codable {
@@ -49,6 +47,13 @@ struct CommomResponseModel: Codable {
         var longitude: Double? = nil
         var `operator`: String? = nil
         var setting: Bool? = nil
+    }
+}
+
+extension CommomResponseModel {
+    
+    static func userLocation(with coordinate: CLLocationCoordinate2D) -> CommomResponseModel {
+        return CommomResponseModel(type: .userLocation, data: .init(app_id: nil, key: nil, jwt: nil, value: nil, latitude: coordinate.latitude, longitude: coordinate.longitude))
     }
 }
 

@@ -22,6 +22,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
     let environment: AlternatorEnvironment
     
     private var webViewLoaded: Bool = false
+    private var enterBackground: Bool = false
     private var cancellables: Set<AnyCancellable> = []
     private let urlString: String
     
@@ -63,6 +64,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
     }
     
     deinit {
+        debugPrint("[Bonnet Alternator] [VM] Deinit")
         self.cancellables.removeAll()
     }
     
@@ -73,7 +75,14 @@ class AlternatorViewModel: NSObject, ObservableObject {
             Task {
                 await MainActor.run(body: {
                     self.webViewLoaded = true
-                    self.userLocationService.askUserPermissionForWhenInUseAuthorizationIfNeeded()
+                    
+                    if self.userLocationService.authorizationStatus.permissionForLocationTrackingGranted,
+                       let coordinate = self.userLocationService.currentCoordinate
+                    {
+                        Task { await self.updateLocation(with: coordinate) }
+                    } else {
+                        self.userLocationService.askUserPermissionForWhenInUseAuthorizationIfNeeded()
+                    }
                 })
             }
         }
@@ -89,6 +98,41 @@ class AlternatorViewModel: NSObject, ObservableObject {
             guard let self, let userCoordinates = self.userLocationService.currentCoordinate else { return }
             Task { await self.updateLocation(with: userCoordinates) }
         }.store(in: &cancellables)
+        
+        // MARK: - App cycle
+        let backgroundDateKey = "AppEnterBackgroundDate"
+        
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification, object: nil).sink { _ in
+            guard self.enterBackground else { return }
+            
+            // Check the time when the app enter in background, if is more that 60 sec, them we will load the entire web view again, if not we will just re-add the listeners to the webservice.
+            if let backgroundDate = UserDefaults.standard.object(forKey: backgroundDateKey),
+               let date = backgroundDate as? Date
+            {
+                let timeDistanceInSec = date.timeIntervalSince(Date())
+                
+                if timeDistanceInSec < 60 {
+                    self.webService.addListeners(self)
+                    return
+                }
+            }
+            
+            self.enterBackground = false
+            Task { await self.loadUrl() }
+        }.store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification, object: nil).sink { _ in
+            self.enterBackground = true
+            UserDefaults.standard.set(Date(), forKey: backgroundDateKey)
+            self.pauseStopProcess()
+        }.store(in: &cancellables)
+    }
+    
+    // MARK: - Lifecycle
+    
+    func pauseStopProcess() {
+        self.webView.stopLoading()
+        self.webService.removeListeners()
     }
 }
 
@@ -169,13 +213,15 @@ extension AlternatorViewModel {
     // MARK: - Communication
     
     @MainActor
-    private func updateLocation(with coordinates: CLLocationCoordinate2D) async {
+    private func updateLocation(with coordinate: CLLocationCoordinate2D) async {
+        guard self.webViewLoaded else { return }
+        
         do {
-            let content = try CommomResponseModel(type: .userLocation, data: .init(key: nil, jwt: nil, value: nil, latitude: coordinates.latitude, longitude: coordinates.longitude)).toString()
+            let content = try CommomResponseModel.userLocation(with: coordinate).toString()
             self.webService.post(content, includeFormat: false, encrypted: true)
-            debugPrint("[Bonnet Alternator] Coordinates updated")
+            debugPrint("[Bonnet Alternator] Coordinate updated")
         } catch let error {
-            debugPrint("[Bonnet Alternator] Couldn't update coordinates, with error: \(error.message)")
+            debugPrint("[Bonnet Alternator] Couldn't update coordinate, error: \(error.localizedDescription)")
         }
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol MessageHandler: Any {
+protocol MessageHandler: NSObjectProtocol {
     func didReceive(_ response: CommomResponseModel)
     func error(_ message: String)
     @MainActor func updateLoader(_ loading: Bool)

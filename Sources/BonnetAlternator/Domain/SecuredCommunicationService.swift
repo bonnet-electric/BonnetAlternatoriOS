@@ -37,8 +37,12 @@ class SecuredCommunicationService {
         // Generate public key
         let iOSPublicKey = self.securityService.getPublicKeyToShared()
         
-        if let filters {
-            debugPrint("[Bonnet Alternator] Added filters: \(filters)")
+        if let _ = filters {
+            debugPrint("[Bonnet Alternator] Handshake with filters")
+        }
+        
+        if let _ = coordinates {
+            debugPrint("[Bonnet Alternator] Handshake with coordinates")
         }
         
         // Generate content data need it to stablish connection
@@ -58,9 +62,9 @@ class SecuredCommunicationService {
         // Generate Shared secret
         do {
             self.sharedSecret = try self.securityService.deriveSharedSecretKey(for: jsPublicKey)
-            debugPrint("[Bonnet Alternator] Shared Secret created")
+            debugPrint("[Bonnet Alternator] Connection established")
         } catch let error {
-            debugPrint("[Bonnet Alternator] Shared Secret error: \(error.message)")
+            debugPrint("[Bonnet Alternator] Connection error: \(error.message)")
         }
     }
     
