@@ -11,7 +11,9 @@ import SwiftUI
 struct AlternatorView: View {
     @StateObject private var model: AlternatorViewModel
     @Binding var isPresented: Bool
+    
     @State private var closeBottomSheetPresented: Bool = false
+    @State private var viewDidLoad: Bool = false
     
     var parentController: UIViewController?
     private let logoImage: LogoIcon?
@@ -91,31 +93,27 @@ struct AlternatorView: View {
             WebViewUI(webView: model.webView)
                 .onAppear {
                     Task {
-                        LogService.shared.addLog("Web view did appear")
-                        debugPrint("[Bonnet Alternator] web view appeared")
+                        debugPrint("[Bonnet Alternator] Web view appeared")
                         await self.model.loadUrl()
                     }
                 }
                 .onDisappear {
+                    debugPrint("[Bonnet Alternator] Web view deallocated")
                     self.model.pauseStopProcess()
-                    LogService.shared.addLog("Web view did disappear")
-                    debugPrint("[Bonnet Alternator] web view deallocated")
                 }
         }
         .updatePaddingWithKeyboardChanges(self.$model.allowKeyboardChanges)
         .edgesIgnoringSafeArea(.bottom)
         .background(Color.white.edgesIgnoringSafeArea(.all))
         .onAppear(perform: {
-            debugPrint("[Bonnet Alternator] On appear")
-            guard !self.model.viewDidLoad else { return }
-            LogService.shared.addLog("Alternator view did load")
+            guard !self.viewDidLoad else { return }
+            debugPrint("[Bonnet Alternator] View did load")
             self.model.isLoading = true
-            self.model.viewDidLoad = true
+            self.viewDidLoad = true
             // Start updating if location tracking is granted
             self.model.startUpdatingUserLocation()
         })
         .presentToast($model.toast)
-        .addLogsFloatingButton()
         .presentBottomSheet(presented: self.$closeBottomSheetPresented,
                             bgType: .blurDismissableBG
         ) {
