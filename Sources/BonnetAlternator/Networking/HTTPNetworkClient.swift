@@ -52,9 +52,10 @@ internal class HTTPNetworkClient: NSObject, URLSessionDelegate {
         
         if let data = try self.checkHTTPStatus(for: response) {
             if let stringData = String(data: data, encoding: .utf8) {
-                debugPrint("[Alternator] Coulnd't parse data from request: \(request.url?.absoluteString ?? "")")
+                debugPrint("[Alternator] Response parse successfully")
                 return stringData
             }
+            debugPrint("[Alternator] Coulnd't parse data from request: \(request.url?.absoluteString ?? "")")
         }
         
         throw SecurityServiceError.other(message: self.defaultErrorMessage)

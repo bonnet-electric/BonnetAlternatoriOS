@@ -30,7 +30,7 @@ class SecuredCommunicationService {
     
     @MainActor
     func establishHandShake(with jsPublicKey: String, 
-                            token: String,
+                            token: String?,
                             coordinates: CLLocationCoordinate2D?,
                             user: String?,
                             filters: Filters?) throws
@@ -39,15 +39,25 @@ class SecuredCommunicationService {
         let iOSPublicKey = self.securityService.getPublicKeyToShared()
         
         if let _ = filters {
-            debugPrint("[Alternator] Handshake with filters")
+            debugPrint("[Alternator] Handshake will include filters")
         }
         
         if let _ = coordinates {
-            debugPrint("[Alternator] Handshake with coordinates")
+            debugPrint("[Alternator] Handshake will include coordinates")
+        }
+        
+        var userFormatted: [String: AnyCodable]? = nil
+        if let user, let data = user.data(using: .utf8) {
+            // Formatted user profile String to proper codable structure from data. This will allow a correct serialisation when encoding the full data that would be sent of the handshake
+            userFormatted = try? JSONDecoder().decode([String: AnyCodable].self, from: data)
+            
+            if userFormatted != nil {
+                debugPrint("[Alternator] Handshake will include user profile")
+            }
         }
         
         // Generate content data need it to stablish connection
-        let data = CommomResponseModel(type: .handShake, data: .init(key: iOSPublicKey, jwt: token, coordinates: coordinates, user: user, filters: filters))
+        let data = CommomResponseModel(type: .handShake, data: .init(key: iOSPublicKey, jwt: token, coordinates: coordinates, user: userFormatted, filters: filters))
         guard let content = try? data.toString() else { return }
         
         // Print app id to confirm proper set up
