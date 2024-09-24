@@ -32,26 +32,27 @@ class SecuredCommunicationService {
     func establishHandShake(with jsPublicKey: String, 
                             token: String,
                             coordinates: CLLocationCoordinate2D?,
+                            user: String?,
                             filters: Filters?) throws
     {
         // Generate public key
         let iOSPublicKey = self.securityService.getPublicKeyToShared()
         
         if let _ = filters {
-            debugPrint("[Bonnet Alternator] Handshake with filters")
+            debugPrint("[Alternator] Handshake with filters")
         }
         
         if let _ = coordinates {
-            debugPrint("[Bonnet Alternator] Handshake with coordinates")
+            debugPrint("[Alternator] Handshake with coordinates")
         }
         
         // Generate content data need it to stablish connection
-        let data = CommomResponseModel(type: .handShake, data: .init(key: iOSPublicKey, jwt: token, coordinates: coordinates, filters: filters))
+        let data = CommomResponseModel(type: .handShake, data: .init(key: iOSPublicKey, jwt: token, coordinates: coordinates, user: user, filters: filters))
         guard let content = try? data.toString() else { return }
         
         // Print app id to confirm proper set up
         if let appId = data.data?.app_id {
-            debugPrint("[Bonnet Alternator] App id: \(appId)")
+            debugPrint("[Alternator] App id: \(appId)")
         }
         
         // Create message formated
@@ -62,9 +63,9 @@ class SecuredCommunicationService {
         // Generate Shared secret
         do {
             self.sharedSecret = try self.securityService.deriveSharedSecretKey(for: jsPublicKey)
-            debugPrint("[Bonnet Alternator] Connection established")
+            debugPrint("[Alternator] Connection established")
         } catch let error {
-            debugPrint("[Bonnet Alternator] Connection error: \(error.message)")
+            debugPrint("[Alternator] Connection error: \(error.message)")
         }
     }
     

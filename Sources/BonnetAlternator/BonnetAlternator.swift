@@ -1,4 +1,5 @@
 import SwiftUI
+import BFSecurity
 
 public typealias Completion = (() -> Void)?
 
@@ -10,7 +11,7 @@ public struct BonnetAlternator {
     /// Assign environment
     public static func setEnvironment(to newEnvironment: AlternatorEnvironment) {
         UsersDefaultHelper.shared.save(newEnvironment.rawValue, withKey: .environment)
-        debugPrint("[Bonnet Alternator] Environment mode set to: \(newEnvironment.rawValue)")
+        debugPrint("[Alternator] Environment mode set to: \(newEnvironment.rawValue)")
     }
     
     /// Get active environment
@@ -19,6 +20,25 @@ public struct BonnetAlternator {
               let environment = AlternatorEnvironment(rawValue: envString)
         else { return .production }
         return environment
+    }
+    
+    /// Should be call whent he users log in to preload their information
+    /// - Parameter tokenGeneratorDelegate: Token generator protocol
+    public func getUserProfile(tokenGeneratorDelegate: TokenGeneratorDelegate?) async throws {
+        guard let token = try await tokenGeneratorDelegate?.refreshToken() else {
+            debugPrint("[Alternator] We were unable to retrieve a token. Please check the TokenGeneratorDelegate functions are set properly!")
+            throw SecurityServiceError.other(message: "Something went wrong. Please try again later")
+        }
+        
+        let userProfile = try await HTTPNetworkClient.shared.preloadUserProfile(with: token, for: self.activeEnvironment)
+        UsersDefaultHelper.shared.save(userProfile, withKey: .userProfile)
+        debugPrint("[Alternator] User profile saved succesfully!")
+    }
+    
+    /// Should be called if the user log out
+    public func clearUserProfile() {
+        UsersDefaultHelper.shared.removeObject(forKey: .userProfile)
+        debugPrint("[Alternator] User profile removed succesfully!")
     }
     
     // MARK: - UIKit Presentation

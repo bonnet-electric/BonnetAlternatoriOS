@@ -36,23 +36,23 @@ fileprivate class ScrollDelegate: NSObject, UIScrollViewDelegate {
 
 fileprivate class WebViewNavigationDelegate: NSObject, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        debugPrint("[Bonnet Alternator] [Web delegate] didStartProvisionalNavigation")
+        debugPrint("[Alternator] [Web delegate] didStartProvisionalNavigation")
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        debugPrint("[Bonnet Alternator] [Web delegate] didFinish navigation")
+        debugPrint("[Alternator] [Web delegate] didFinish navigation")
     }
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        debugPrint("[Bonnet Alternator] [Web delegate] didFail navigation with error: \(error.message)")
+        debugPrint("[Alternator] [Web delegate] didFail navigation with error: \(error.message)")
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        debugPrint("[Bonnet Alternator] [Web delegate] didFailProvisionalNavigation with error: \(error.message)")
+        debugPrint("[Alternator] [Web delegate] didFailProvisionalNavigation with error: \(error.message)")
     }
     
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        debugPrint("[Bonnet Alternator] [Web delegate] contentProcessDidTerminate")
+        debugPrint("[Alternator] [Web delegate] contentProcessDidTerminate")
     }
 }
 #endif

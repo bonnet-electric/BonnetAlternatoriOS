@@ -56,7 +56,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
         }
         // Configure url based on the environment
         self.urlString = self.environment.url
-        debugPrint("[Bonnet Alternator] Environment: \(self.environment.rawValue)")
+        debugPrint("[Alternator] Environment: \(self.environment.rawValue)")
         
         super.init()
         self.webService.tokenDelegate = tokenDelegate
@@ -64,7 +64,7 @@ class AlternatorViewModel: NSObject, ObservableObject {
     }
     
     deinit {
-        debugPrint("[Bonnet Alternator] [VM] Deinit")
+        debugPrint("[Alternator] [VM] Deinit")
         self.cancellables.removeAll()
     }
     
@@ -189,14 +189,14 @@ extension AlternatorViewModel {
         Task {
             do {
                 guard let token = try await self.webService.tokenDelegate?.refreshToken() else {
-                    debugPrint("[Bonnet Alternator] TokenGeneratorDelegate haven't been assign")
+                    debugPrint("[Alternator] TokenGeneratorDelegate haven't been assign")
                     return
                 }
-                debugPrint("[Bonnet Alternator] Token generated for test: \(token)")
+                debugPrint("[Alternator] Token generated for test: \(token)")
                 await self.updateToast(with: .init(style: .warning, message: "Generated token: \(token)", duration: 3, position: .bottom))
                 
             } catch let error {
-                debugPrint("[Bonnet Alternator] Token could not be generated, error: \(error.message)")
+                debugPrint("[Alternator] Token could not be generated, error: \(error.message)")
             }
         }
     }
@@ -219,9 +219,9 @@ extension AlternatorViewModel {
         do {
             let content = try CommomResponseModel.userLocation(with: coordinate).toString()
             self.webService.post(content, includeFormat: false, encrypted: true)
-            debugPrint("[Bonnet Alternator] Coordinate updated")
+            debugPrint("[Alternator] Coordinate updated")
         } catch let error {
-            debugPrint("[Bonnet Alternator] Couldn't update coordinate, error: \(error.localizedDescription)")
+            debugPrint("[Alternator] Couldn't update coordinate, error: \(error.localizedDescription)")
         }
     }
 }
