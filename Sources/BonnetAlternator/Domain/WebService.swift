@@ -136,15 +136,26 @@ extension WebService: WKScriptMessageHandler {
                 if result.type == .handShake,
                    let jsPublicKey = result.data?.key
                 {
-                    guard let newToken = try await self.tokenDelegate?.refreshToken() else {
-                        self.messageHandler?.error("We couldn't refresh the session")
-                        return
-                    }
-                    
-                    let coordinates: CLLocationCoordinate2D? = self.userLocationService.currentCoordinate
+                    // Get user profile and filters from userdefauls
                     let userProfile = self.userDefaultsHelper.getString(forKey: .userProfile)
                     let filters: Filters? = self.userDefaultsHelper.get(forKey: .filters)
-                    try self.communicationService.establishHandShake(with: jsPublicKey, token: newToken, coordinates: coordinates, user: userProfile, filters: filters)
+                    // Get user coordinates
+                    let coordinates: CLLocationCoordinate2D? = self.userLocationService.currentCoordinate
+                    
+                    if userProfile == nil {
+                        // If the users profile is empty we need to get the users token
+                        guard let newToken = try await self.tokenDelegate?.refreshToken() else {
+                            self.messageHandler?.error("We couldn't refresh the session")
+                            return
+                        }
+                        
+                        try self.communicationService.establishHandShake(with: jsPublicKey, token: newToken, coordinates: coordinates, user: userProfile, filters: filters)
+                        
+                    } else {
+                        // If the users profile contains data, proceed with handshake without token
+                        try self.communicationService.establishHandShake(with: jsPublicKey, token: nil, coordinates: coordinates, user: userProfile, filters: filters)
+                    }
+                    
                     self.connectionCompleted?()
                 }
                 
