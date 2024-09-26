@@ -24,8 +24,8 @@ public struct BonnetAlternator {
     
     /// Should be call whent he users log in to preload their information
     /// - Parameter tokenGeneratorDelegate: Token generator protocol
-    public func getUserProfile(tokenGeneratorDelegate: TokenGeneratorDelegate?) async throws {
-        guard let token = try await tokenGeneratorDelegate?.refreshToken() else {
+    public func getUserProfile(with delegate: TokenGeneratorDelegate?) async throws {
+        guard let token = try await delegate?.refreshToken() else {
             debugPrint("[Alternator] We were unable to retrieve a token. Please check the TokenGeneratorDelegate functions are set properly!")
             throw SecurityServiceError.other(message: "Something went wrong. Please try again later")
         }
