@@ -23,7 +23,8 @@ public struct BonnetAlternator {
     }
     
     // MARK: - Profile
-    /// Should be call whent he users log in to preload their information
+    /// Will request the users profile data, if succesful will save it in UserDefaults (Cache).
+    /// - Important: Should be called everytime a user Sign In
     /// - Parameter tokenGeneratorDelegate: Token generator protocol
     public func getUserData(with delegate: TokenGeneratorDelegate?) async throws {
         guard let token = try await delegate?.refreshToken() else {
@@ -42,7 +43,8 @@ public struct BonnetAlternator {
         return true
     }
     
-    /// Should be called if the user log out
+    /// Will clear the user's profile data from UserDefaults (Cache)
+    /// - Important: Should be called everytime the user Sign Out
     public func clearUserData() {
         UsersDefaultHelper.shared.removeObject(forKey: .userProfile)
         debugPrint("[Alternator] User profile removed succesfully!")
