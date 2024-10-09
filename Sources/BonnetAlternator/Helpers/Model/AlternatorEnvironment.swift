@@ -18,4 +18,13 @@ public enum AlternatorEnvironment: String, Equatable {
             return "https://alternator.bonnetapps.com"
         }
     }
+    
+    internal var profileURL: String {
+        switch self {
+        case .staging:
+            return "https://test.bonnetapps.com/partner-api/users/profile"
+        default:
+            return "https://bonnetapps.com/partner-api/users/profile"
+        }
+    }
 }

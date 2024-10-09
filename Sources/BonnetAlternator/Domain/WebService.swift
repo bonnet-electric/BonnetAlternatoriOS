@@ -33,7 +33,7 @@ final class WebService: NSObject {
     }
     
     deinit {
-        debugPrint("[Bonnet Alternator] [WS] Deallocated")
+        debugPrint("[Alternator] [WS] Deallocated")
         self.removeListeners()
     }
     
@@ -116,7 +116,7 @@ extension WebService: WKScriptMessageHandler {
             if let body = message.body as? String,
                !body.contains("key")
             {
-                debugPrint("[Bonnet Alternator] [WS] LOG: \(message.body as? String)")
+                debugPrint("[Alternator] [WS] LOG: \(message.body as? String)")
             }
             return
         }
@@ -136,14 +136,26 @@ extension WebService: WKScriptMessageHandler {
                 if result.type == .handShake,
                    let jsPublicKey = result.data?.key
                 {
-                    guard let newToken = try await self.tokenDelegate?.refreshToken() else {
-                        self.messageHandler?.error("We couldn't refresh the session")
-                        return
+                    // Get user profile and filters from userdefauls
+                    let userProfile = self.userDefaultsHelper.getString(forKey: .userProfile)
+                    let filters: Filters? = self.userDefaultsHelper.get(forKey: .filters)
+                    // Get user coordinates
+                    let coordinates: CLLocationCoordinate2D? = self.userLocationService.currentCoordinate
+                    
+                    if userProfile == nil {
+                        // If the users profile is empty we need to get the users token
+                        guard let newToken = try await self.tokenDelegate?.refreshToken() else {
+                            self.messageHandler?.error("We couldn't refresh the session")
+                            return
+                        }
+                        
+                        try self.communicationService.establishHandShake(with: jsPublicKey, token: newToken, coordinates: coordinates, user: userProfile, filters: filters)
+                        
+                    } else {
+                        // If the users profile contains data, proceed with handshake without token
+                        try self.communicationService.establishHandShake(with: jsPublicKey, token: nil, coordinates: coordinates, user: userProfile, filters: filters)
                     }
                     
-                    let filters: Filters? = self.userDefaultsHelper.get(forKey: .filters)
-                    let coordinates: CLLocationCoordinate2D? = self.userLocationService.currentCoordinate
-                    try await self.communicationService.establishHandShake(with: jsPublicKey, token: newToken, coordinates: coordinates, filters: filters)
                     self.connectionCompleted?()
                 }
                 
@@ -171,7 +183,7 @@ extension WebService: WKScriptMessageHandler {
                     
                     if result.type == .loading {
                         let isLoading = result.data?.setting ?? false
-                        await self.messageHandler?.updateLoader(isLoading)
+                        self.messageHandler?.updateLoader(isLoading)
                         return
                     }
                     

@@ -17,6 +17,7 @@ final class UsersDefaultHelper {
         case userAlternatorPath = "CurrentUserAlternatorPath"
         case environment = "CurrentEnvironment"
         case filters = "CurrentUserFilters"
+        case userProfile = "UserProfile"
     }
     
     // MARK: - Simple values

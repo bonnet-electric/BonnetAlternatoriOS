@@ -19,7 +19,7 @@ extension AlternatorViewModel: MessageHandler {
                   let url = URL(string: message), UIApplication.shared.canOpenURL(url)
             else { return }
             
-            debugPrint("[Bonnet Alternator] Did receive url: \(message)")
+            debugPrint("[Alternator] Did receive url: \(message)")
             
             DispatchQueue.main.async {
                 UIApplication.shared.open(url)
@@ -63,7 +63,7 @@ extension AlternatorViewModel: MessageHandler {
     }
     
     func error(_ message: String) {
-        debugPrint("[Bonnet Alternator] Did receive error: \(message)")
+        debugPrint("[Alternator] Did receive error: \(message)")
     }
     
     // MARK: - Actions

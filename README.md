@@ -125,6 +125,44 @@ struct ContentView: View {
 }
 ```
 
+### Optimisation
+
+To optimise the loading for alternator, we recommend preload the user's profile once a user Sign-in in your app. To do this just need to call `func getUserData(with delegate:: <#TokenGeneratorDelegate?#>) async throws`.
+
+**Example**
+```swift
+func signIn() async {
+    do {
+        // Sign in your user and if all good preload the user for alternator
+        let alternator = BonnetAlternator()
+        try await alternator.getUserData(with: <#TokenGeneratorDelegate?#>)
+        // All good! Now you can present the alternator with a faster load.
+    } catch let error {
+        // Do something to handle your error
+    }
+}
+``` 
+
+When then user sign out remember to clear the user from cache, using `func clearUserData()`.
+
+When your app returns from background or from fully close, we recommend to check is the user is preload using `var isUserDataCached: Bool`, if `false` get your user data again.
+
+ **Example**
+```swift
+func verifyUsersData() async {
+    let alternator = BonnetAlternator()
+    
+    guard alternator.isUserDataCached == false else { return } 
+
+    do {
+        try await alternator.getUserData(with: <#TokenGeneratorDelegate?#>)
+        // All good! Now you can present the alternator with a faster load.
+    } catch let error {
+        // Do something to handle your error
+    }
+}
+``` 
+
 ### Token Generation/Refresh
 
 To use this SDK, your users will need an authentication token that will need to be generated in your server, and passed onto the SDK so it can securely be passed on to Bonnet’s server see [Authentication/authorisation](https://www.notion.so/Authentication-authorisation-6a391f45fffc46e9a09dff6f8e683b85?pvs=21). For this, you will need a `TokenGeneratorDelegate`.

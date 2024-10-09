@@ -41,6 +41,7 @@ struct CommomResponseModel: Codable {
         var key: String? = nil
         var jwt: String? = nil
         var coordinates: CLLocationCoordinate2D? = nil
+        var user: [String: AnyCodable]? = nil
         var filters: Filters? = nil
         var value: String? = nil
         var latitude: Double? = nil
