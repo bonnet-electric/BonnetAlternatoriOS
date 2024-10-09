@@ -22,9 +22,10 @@ public struct BonnetAlternator {
         return environment
     }
     
+    // MARK: - Profile
     /// Should be call whent he users log in to preload their information
     /// - Parameter tokenGeneratorDelegate: Token generator protocol
-    public func getUserProfile(with delegate: TokenGeneratorDelegate?) async throws {
+    public func getUserData(with delegate: TokenGeneratorDelegate?) async throws {
         guard let token = try await delegate?.refreshToken() else {
             debugPrint("[Alternator] We were unable to retrieve a token. Please check the TokenGeneratorDelegate functions are set properly!")
             throw SecurityServiceError.other(message: "Something went wrong. Please try again later")
@@ -35,8 +36,14 @@ public struct BonnetAlternator {
         debugPrint("[Alternator] User profile saved succesfully!")
     }
     
+    /// Verify if user profile is saved in cache
+    public var isUserDataCached: Bool {
+        guard let profile = UsersDefaultHelper.shared.getString(forKey: .userProfile), !profile.isEmpty else { return false }
+        return true
+    }
+    
     /// Should be called if the user log out
-    public func clearUserProfile() {
+    public func clearUserData() {
         UsersDefaultHelper.shared.removeObject(forKey: .userProfile)
         debugPrint("[Alternator] User profile removed succesfully!")
     }
