@@ -160,7 +160,7 @@ extension WebService: WKScriptMessageHandler {
                 }
                 
             } catch let error {
-                debugPrint("[Bonent Alternator] [Response] received message error: \(error.message)")
+                debugPrint("[Alternator] [Response] received message error: \(error.message)")
                 
                 let decryptedResult: Result<CommomResponseModel, SecurityServiceError> = self.communicationService.decrypt(body)
                 
@@ -168,12 +168,12 @@ extension WebService: WKScriptMessageHandler {
                 case .success(let result):
                     
                     if result.type == .unowned {
-                        debugPrint("[Bonent Alternator] [Response] received message with unowned type: \(body)")
+                        debugPrint("[Alternator] [Response] received message with unowned type: \(body)")
                         return
                     }
                     
                     if let type = result.type?.rawValue {
-                        debugPrint("[Bonent Alternator] [Response] received message of type: \(type)")
+                        debugPrint("[Alternator] [Response] received message of type: \(type)")
                     }
                     
                     if result.type == .token {

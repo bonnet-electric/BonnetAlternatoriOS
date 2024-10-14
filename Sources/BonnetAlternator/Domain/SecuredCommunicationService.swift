@@ -95,13 +95,13 @@ class SecuredCommunicationService {
             let decryptedData = try self.securityService.decryptData(data, key: sharedSecret)
             
             if let string = String(data: decryptedData, encoding: .utf8) {
-                debugPrint("[Bonent Alternator] Decrypted data: \(string)")
+                debugPrint("[Alternator] Decrypted data: \(string)")
             }
             
             let result: T = try T.parse(data: decryptedData)
             return .success(result)
         } catch let error {
-            debugPrint("[Bonent Alternator] Decrypted data parsing error: \(error.message)")
+            debugPrint("[Alternator] Decrypted data parsing error: \(error.message)")
             return .failure(.error(error))
         }
     }
